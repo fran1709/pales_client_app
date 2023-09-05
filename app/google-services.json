@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "472894101142",
+    "project_id": "pales-firebase",
+    "storage_bucket": "pales-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472894101142:android:2219d3b03b821f240554b7",
+        "android_client_info": {
+          "package_name": "com.pales.reservas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472894101142-adr4qojv1n1cbdd5jo8bg3a05akb1n18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGj1j9RQj5NpNmA6tNbG0rK3R63ZlDe-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472894101142-adr4qojv1n1cbdd5jo8bg3a05akb1n18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
