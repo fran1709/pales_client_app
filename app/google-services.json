@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:472894101142:android:2219d3b03b821f240554b7",
         "android_client_info": {
-          "package_name": "com.pales.reservas"
+          "package_name": "com.example.client_app"
         }
       },
       "oauth_client": [
