@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- comment_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFF"
+    android:orientation="vertical"
+    android:padding="16dp"> <!-- Agregando color de fondo azul personalizado -->
+
+    <TextView
+        android:id="@+id/jugadorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/cardview_default_radius"
+        android:text="Nombre del Jugador"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/comentarioTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Texto del Comentario"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+</LinearLayout>
+
+
