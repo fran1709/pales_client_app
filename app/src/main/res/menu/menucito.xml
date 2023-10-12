@@ -4,7 +4,7 @@
     android:background="@android:color/white">
     <item
         android:id="@+id/nuevoComentario"
-        android:title="NUevo Comentario"
-        app:showAsAction="never"
-        android:icon="@color/white"/>
+        android:icon="@android:drawable/sym_action_chat"
+        android:title="Agregar"
+        app:showAsAction="ifRoom" />
 </menu>

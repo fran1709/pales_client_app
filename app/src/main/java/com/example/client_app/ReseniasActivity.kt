@@ -50,6 +50,11 @@ class ReseniasActivity : AppCompatActivity() {
         getResenias()
     }
 
+    // Funcion para que funcione el retroceso (flechita para atrás xde)
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menucito, menu)
         return true
@@ -161,7 +166,11 @@ class ReseniasActivity : AppCompatActivity() {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
-    /*
+}
+
+
+
+/*
     fun chargeListViewSimple() {
         val listView: ListView = findViewById(R.id.listVIew)
 
@@ -196,5 +205,3 @@ class ReseniasActivity : AppCompatActivity() {
             Toast.makeText(this@ReseniasActivity, "Jugador: ${reseniaSeleccionada.jugador}\nComentario: ${reseniaSeleccionada.comentario}", Toast.LENGTH_SHORT).show()
         }
     }*/
-
-}

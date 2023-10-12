@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="my_light_primary">#FF6200EA</color>
+    <color name="my_status_bar_color">#FF512DA8</color>
+    <color name="my_navigation_bar_color">#FF512DA8</color>
+
 </resources>

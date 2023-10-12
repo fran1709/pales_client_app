@@ -14,9 +14,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0F1E53"
+        android:background="#2196F3"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
         app:logo="@color/white"
         app:titleTextColor="@color/white" />
 
@@ -30,11 +29,9 @@
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#142967"
+        android:background="#2196F3"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:logo="@color/white"
         app:titleTextColor="@color/white" />
-
-
 </LinearLayout>
