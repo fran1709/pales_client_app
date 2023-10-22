@@ -5,15 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-class MainActivity : AppCompatActivity() {
+class menu_principal : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_menu_principal)
     }
 
-    fun call_activity_menu_principal(view: View){
+    fun callActivityResenias(view: View){
         // Crear un Intent para iniciar la Activity2
-        val intent = Intent(this, menu_principal::class.java)
+        val intent = Intent(this, ReseniasActivity::class.java)
 
         // Opcional: Puedes enviar datos extras a la Activity2 utilizando putExtra
         intent.putExtra("nombre", "John")
