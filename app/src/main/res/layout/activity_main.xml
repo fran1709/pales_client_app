@@ -7,10 +7,11 @@
     android:onClick="call_activity_menu_principal"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:text="Hello World!" />
 
     <Button
@@ -19,5 +20,14 @@
         android:layout_height="wrap_content"
         android:onClick="call_activity_menu_principal"
         android:text="Menu Principal" />
+        android:onClick="callLogin"
+        android:text="Login" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="callRegister"
+        android:text="Registro" />
 
 </LinearLayout>
