@@ -35,11 +35,11 @@ class RegisterActivity : AppCompatActivity() {
         supportActionBar?.title = "Registro de Usuario"
 
         // Spinner (Dropdown) para la posición
-        val spinner = findViewById<Spinner>(R.id.spinnerPosition)
-        val positions = arrayOf("Portero", "Defensa", "Creativo", "Delantero")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        //val spinner = findViewById<Spinner>(R.id.spinnerPosition)
+        //val positions = arrayOf("Portero", "Defensa", "Creativo", "Delantero")
+        //val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, positions)
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        //spinner.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -62,7 +62,6 @@ class RegisterActivity : AppCompatActivity() {
 
         val email = findViewById<EditText>(R.id.editTextEmail).text.toString()
         val password = findViewById<EditText>(R.id.editTextPassword).text.toString()
-
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -87,36 +86,47 @@ class RegisterActivity : AppCompatActivity() {
         val fullName = findViewById<EditText>(R.id.editTextFullName).text.toString()
         val nickname = findViewById<EditText>(R.id.editTextNickname).text.toString()
         val phoneNumber = findViewById<EditText>(R.id.editTextPhoneNumber).text.toString()
-        val age = findViewById<EditText>(R.id.editTextAge).text.toString()
-        val selectedPosition = findViewById<Spinner>(R.id.spinnerPosition).selectedItem.toString()
-        val bloqueo = intArrayOf();
+
+
+        val bloqueosList = mutableListOf<String>();
 
         val usuario = hashMapOf(
             "email" to email,
-            "contraseña" to password,
+            "contrasena" to password,
             "nombre" to fullName,
             "telefono" to phoneNumber,
-            "edad" to age,
+            "fecha_nacimiento" to "1160546400000",
             "apodo" to nickname,
-            "posiciones" to selectedPosition,
-            "bloqueos" to bloqueo,
+            "posiciones" to "selectedPosition",
+            "bloqueos" to bloqueosList,
             "rol" to "Jugador",
-            "estado" to true,
-            "id" to id
+            "estado" to false,
+            "clasificacion" to "",
+            "UID" to id
         )
 
         db.collection("jugadores")
             .add(usuario)
             .addOnSuccessListener { documentReference ->
                 println("DocumentSnapshot agregado con ID: ${documentReference.id}")
+                Toast.makeText(
+                    baseContext,
+                    "Registro Exitoso ${documentReference.id}",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             .addOnFailureListener { e ->
                 println("Error al agregar documento: $e")
+                Toast.makeText(
+                    baseContext,
+                    "Registro Fallido",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
     }
 
     fun callLogin() {
-        // Crear un Intent para iniciar la Activity2
+        // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, LoginActivity::class.java)
         // Iniciar la Activity2 utilizando el Intent
         startActivity(intent)

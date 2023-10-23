@@ -134,7 +134,7 @@
 
     <LinearLayout
         android:layout_width="350dp"
-        android:layout_height="95dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
@@ -147,14 +147,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edad" />
+                android:text="Fecha de nacimiento" />
 
-            <EditText
-                android:id="@+id/editTextAge"
+            <CalendarView
+                android:id="@+id/calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:hint="Edad"
-                android:inputType="number" />
+                android:layout_height="176dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -167,11 +166,12 @@
                 android:layout_height="wrap_content"
                 android:text="Posición" />
 
-            <Spinner
-                android:id="@+id/spinnerPosition"
+            <CheckBox
+                android:id="@+id/checkBox"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="16dp" />
+                android:layout_height="wrap_content"
+                android:text="CheckBox" />
+
         </LinearLayout>
     </LinearLayout>
 
