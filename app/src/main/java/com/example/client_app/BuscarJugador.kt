@@ -4,71 +4,121 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.firestore.FirebaseFirestore
-
-data class Jugador(val nombre: String, val posiciones: List<String>)
+import java.util.Locale
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
+data class Jugador1(val nombre: String, val apodo: String, val posiciones: List<String>)
 
-class ListarUsuarios : AppCompatActivity() {
-
+class BuscarJugador : AppCompatActivity() {
+    private val jugadoresList = mutableListOf<Jugador1>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listar_usuarios)
-        // Inicializar Firebase
+        setContentView(R.layout.activity_buscar_jugador)
 
         db = FirebaseFirestore.getInstance()
-        usersListData()
 
-        val searchPlayer: ImageButton = findViewById(R.id.searchPlayer)
-        searchPlayer.setOnClickListener {
-            activitybuscarJugador()
-        }
+        val backButton: ImageButton = findViewById(R.id.backButton)
+        val searchPlayerButton: ImageButton = findViewById(R.id.searchPlayer)
+        val searchInput: EditText = findViewById(R.id.etBuscarJugador)
+        val lv1: ListView = findViewById(R.id.lv1)
+
+        //usersListData()
+
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == androidx.appcompat.app.AppCompatActivity.RESULT_OK) {
                 val data: android.content.Intent? = result.data
-
             }
         }
+        // Configura un adaptador vacío para el ListView
+        val adapter = JugadorAdapter(this, mutableListOf())
+        lv1.adapter = adapter
+
+        // Maneja el clic en el botón de búsqueda
+        searchPlayerButton.setOnClickListener {
+            val searchText = searchInput.text.toString().toLowerCase(Locale.getDefault())
+            // Realiza la búsqueda de jugadores que coincidan con el texto ingresado
+            val filteredJugadores = jugadoresList.filter {
+                it.nombre.toLowerCase(Locale.getDefault()).contains(searchText) ||
+                        it.apodo.toLowerCase(Locale.getDefault()).contains(searchText)
+            }
+
+            // Actualiza el adaptador del ListView con los resultados de la búsqueda
+            adapter.updateData(filteredJugadores)
+        }
+        backButton.setOnClickListener {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+        // Cargar los datos de la colección "jugadores"
+        loadJugadoresData()
     }
-    private fun usersListData() {
-        val jugadoresCollection = db.collection("jugadores")
-
-        jugadoresCollection.get()
+    private fun loadJugadoresData() {
+        val lv1: ListView = findViewById(R.id.lv1)
+        db.collection("jugadores")
+            .get()
             .addOnSuccessListener { querySnapshot ->
-                val jugadoresList = mutableListOf<Jugador>()
-
                 for (document in querySnapshot) {
                     val nombre = document.getString("nombre") ?: ""
+                    val apodo = document.getString("apodo") ?: ""
                     val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
-                    val jugador = Jugador(nombre, posiciones) //AGREGAR ID
+                    val jugador = Jugador1(nombre, apodo, posiciones)
                     jugadoresList.add(jugador)
                 }
 
-                // Mostrar los datos en el ListView
-                displayJugadores(jugadoresList)
+                // Notificar al adaptador para que actualice la lista en el ListView
+                val adapter = lv1.adapter as JugadorAdapter
+                adapter.updateData(jugadoresList)
             }
             .addOnFailureListener { exception ->
-                // Handle failures
+                println("Ocurrió un error: ${exception.message}")
             }
     }
-    private fun displayJugadores(jugadoresList: List<Jugador>) {
-        val listView: ListView = findViewById(R.id.lv1)
-        val adapter = JugadorAdapter(this, jugadoresList)
-        listView.adapter = adapter
-    }
-    class JugadorAdapter(context: Context, private val jugadores: List<Jugador>) : ArrayAdapter<Jugador>(context, 0, jugadores) {
-
+//    private fun usersListData() {
+//        val jugadoresCollection = db.collection("jugadores")
+//
+//        jugadoresCollection.get()
+//            .addOnSuccessListener { querySnapshot ->
+//                val jugadoresList = mutableListOf<Jugador1>()
+//
+//                for (document in querySnapshot) {
+//                    val nombre = document.getString("nombre") ?: ""
+//                    val apodo = document.getString("apodo") ?: ""
+//                    val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
+//                    val jugador = Jugador1(nombre, apodo, posiciones) //AGREGAR ID
+//                    jugadoresList.add(jugador)
+//                }
+//
+//                // Mostrar los datos en el ListView
+//                displayJugadores(jugadoresList)
+//            }
+//            .addOnFailureListener { exception ->
+//                // Handle failures
+//            }
+//    }
+//    private fun displayJugadores(jugadoresList: MutableList<Jugador1>) {
+//        val listView: ListView = findViewById(R.id.lv1)
+//        val adapter = JugadorAdapter(this, jugadoresList)
+//        listView.adapter = adapter
+//    }
+    class JugadorAdapter(context: Context, private val jugadores: MutableList<Jugador1>) : ArrayAdapter<Jugador1>(context, 0, jugadores) {
+        fun updateData(newData: List<Jugador1>) {
+            jugadores.clear()
+            jugadores.addAll(newData)
+            notifyDataSetChanged()
+        }
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var itemView = convertView
             if (itemView == null) {
@@ -109,13 +159,8 @@ class ListarUsuarios : AppCompatActivity() {
             return itemView!!
         }
     }
-
     fun activityperfiljugador(view: View){
         val intent = Intent(this, PerfilJugador::class.java)
-        startForResult.launch(intent)
-    }
-    fun activitybuscarJugador(){
-        val intent = Intent(this, BuscarJugador::class.java)
         startForResult.launch(intent)
     }
 }

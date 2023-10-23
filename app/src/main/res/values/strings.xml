@@ -1,3 +1,66 @@
 <resources>
     <string name="app_name">client_app</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Profile -->
+    <string name="nickname">
+        Apodo
+    </string>
+    <string name="phone">
+        Teléfono
+    </string>
+    <string name="age">
+        Edad
+    </string>
+    <string name="classification">
+        Clasificación
+    </string>
+    <string name="nicknameText">
+        Josucho
+    </string>
+    <string name="phoneText">
+        8465-2109
+    </string>
+    <string name="ageText">
+        21
+    </string>
+    <string name="classificationText">
+        Bueno
+    </string>
+    <string name="playerName">
+    Josue Santos
+    </string>
+    <string name="backButtonDescription">
+    Go back.
+    </string>
+    <string name="peopleButtonDescription">
+    Obliqued users.
+    </string>
+    <string name="attributeBackgroundDesc">
+    Background container for player attributes
+    </string>
+    <string name="nickEditBtn">
+    Edit nickname
+    </string>
+    <string name="phoneEditBtn">
+    Edit phone
+    </string>
+    <string name="ageEditBtn">
+    Edit age
+    </string>
+    <string name="classEditBtn">
+    Edit edit classification
+    </string>
+
+    <!--Aprove Users-->
+    <string name="acceptBtnDesc">
+        Accept user
+    </string>
+    <string name="rejectBtnDesc">
+        Reject user
+    </string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
 </resources>
