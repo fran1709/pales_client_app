@@ -13,6 +13,7 @@
         android:theme="@style/Theme.Client_app"
         tools:targetApi="31">
         <activity
+
             android:name=".BuscarJugador"
             android:exported="false" />
         <activity
@@ -25,7 +26,20 @@
             android:name=".ListarUsuarios"
             android:exported="false" />
         <activity
-            android:name=".MiPerfil"
+            android:name=".MiPerfil"/>
+        <activity
+            android:name=".menu_principal"
+            android:exported="false"
+            android:label="@string/title_activity_menu_principal"
+            android:theme="@style/Theme.Client_app.NoActionBar" />
+        <activity
+            android:name=".ReseniasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

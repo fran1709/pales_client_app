@@ -11,4 +11,7 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="grey">#C7C7C7</color>
+    <color name="my_light_primary">#FF6200EA</color>
+    <color name="my_status_bar_color">#FF512DA8</color>
+    <color name="my_navigation_bar_color">#FF512DA8</color>
 </resources>
