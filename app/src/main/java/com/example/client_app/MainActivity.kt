@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         // Opcional: Puedes enviar datos extras a la Activity2 utilizando putExtra
         intent.putExtra("nombre", "John")
         intent.putExtra("edad", 30)
-
+    }
 
     fun callLogin(view: View) {
         // Crear un Intent para iniciar la Activity2
