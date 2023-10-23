@@ -4,13 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="call_activity_menu_principal"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:text="Hello World!" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="call_activity_menu_principal"
+        android:text="Menu Principal" />
         android:onClick="callLogin"
         android:text="Login" />
 
@@ -20,4 +29,5 @@
         android:layout_height="wrap_content"
         android:onClick="callRegister"
         android:text="Registro" />
+
 </LinearLayout>
