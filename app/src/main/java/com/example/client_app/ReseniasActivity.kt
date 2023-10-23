@@ -13,8 +13,10 @@ import com.google.firebase.firestore.FieldValue
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -47,6 +49,13 @@ class ReseniasActivity : AppCompatActivity() {
         // Inicializar el RecyclerView
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val fabAgregarComentario = findViewById<FloatingActionButton>(R.id.fabAgregarComentario)
+        fabAgregarComentario.setOnClickListener {
+            // Maneja el clic en el botón flotante (por ejemplo, muestra el cuadro de diálogo para agregar un comentario)
+            showComentarioDialog()
+        }
+        fabAgregarComentario.setColorFilter(ContextCompat.getColor(this, R.color.white))
 
         //getResenias()
         cargarResenias()
@@ -103,7 +112,12 @@ class ReseniasActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged();
     }
 
+
+
     fun showComentarioDialog() {
+
+
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Agregar Comentario")
 
