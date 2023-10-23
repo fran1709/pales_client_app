@@ -126,12 +126,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun activityperfil(view: View){
-        val intent = Intent(this, MiPerfil::class.java)
-        startActivity(intent)
-    }
-    fun activitylistarusuarios(view: View){
-        val intent = Intent(this, ListarUsuarios::class.java)
-        startActivity(intent)
-    }
+
 }

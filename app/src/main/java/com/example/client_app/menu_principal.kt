@@ -15,11 +15,16 @@ class menu_principal : AppCompatActivity() {
         // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, ReseniasActivity::class.java)
 
-        // Opcional: Puedes enviar datos extras a la Activity2 utilizando putExtra
-        intent.putExtra("nombre", "John")
-        intent.putExtra("edad", 30)
-
         // Iniciar la Activity2 utilizando el Intent
+        startActivity(intent)
+    }
+
+    fun activityperfil(view: View){
+        val intent = Intent(this, MiPerfil::class.java)
+        startActivity(intent)
+    }
+    fun activitylistarusuarios(view: View){
+        val intent = Intent(this, ListarUsuarios::class.java)
         startActivity(intent)
     }
 }
