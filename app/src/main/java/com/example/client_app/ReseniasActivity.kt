@@ -1,5 +1,6 @@
 package com.example.client_app
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,8 @@ class ReseniasActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        getResenias()
+        //getResenias()
+        cargarResenias()
     }
 
     // Funcion para que funcione el retroceso (flechita para atrás xde)
@@ -71,6 +73,7 @@ class ReseniasActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun createComentario(comentario: String, estado: Boolean, jugador: String) {
         // Crear un nuevo documento en la colección "resena"
         val nuevoComentario = hashMapOf(
@@ -125,6 +128,84 @@ class ReseniasActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    // Método para cargar la lista de reseñas
+    private fun cargarResenias() {
+        db.collection("resena")
+            .get()
+            .addOnSuccessListener { result ->
+                val reseñas = ArrayList<Resenia>()
+                for (document in result) {
+                    val data = document.data
+                    val comentario = data["comentario"] as String
+                    val estado = data["estado"] as Boolean
+                    val fecha = data["fecha"] as Timestamp
+                    val jugador_id = data["jugador"] as String
+                    reseñas.add(Resenia(comentario, estado, fecha, jugador_id))
+                }
+                cargarJugadores(reseñas)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }
+    // Método para cargar la lista de jugadores
+    private fun cargarJugadores(reseñas: List<Resenia>) {
+        db.collection("jugadores")
+            .get()
+            .addOnSuccessListener { result ->
+                val jugadores = HashMap<String, String>()
+                for (document in result) {
+                    val data = document.data
+                    val id = document.id
+                    val nombre = data["nombre"] as String
+                    jugadores[id] = nombre
+                }
+                combinarReseniasYJugadores(reseñas, jugadores)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }
+    // Método para combinar reseñas y jugadores y cargar el RecyclerView
+    private fun combinarReseniasYJugadores(reseñas: List<Resenia>, jugadores: Map<String, String>) {
+        val reseniasList = ArrayList<Resenia>()
+        for (resenia in reseñas) {
+            val jugadorNombre = jugadores[resenia.jugador]
+            if (jugadorNombre != null) {
+                val reseniaConNombre = Resenia(resenia.comentario, resenia.estado, resenia.fecha, jugadorNombre)
+                reseniasList.add(reseniaConNombre)
+            }
+        }
+
+        if (reseniasList.isNotEmpty()) {
+            Toast.makeText(this@ReseniasActivity, "Sí hay comentarios disponibles", Toast.LENGTH_SHORT).show()
+            adapter = ReseniasAdapter(reseniasList)
+            recyclerView.adapter = adapter
+        } else {
+            Toast.makeText(this@ReseniasActivity, "No hay comentarios disponibles", Toast.LENGTH_SHORT).show()
+        }
+    }
+/*
+    fun getNombreJugador(idJugador: String, callback: (String) -> Unit) {
+        db.collection("jugadores").get()
+            .addOnSuccessListener { result ->
+                var nombreJugador = "" // Inicializa con un valor vacío
+                for (document in result) {
+                    if (idJugador == document.id) {
+                        val data = document.data
+                        nombreJugador = data["nombre"] as String
+                        break // Se encontró el jugador, puedes salir del bucle
+                    }
+                }
+                callback(nombreJugador) // Llama a la devolución de llamada con el nombre del jugador
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error obteniendo el nombre del jugador", exception)
+                callback("") // En caso de error, llama a la devolución de llamada con un nombre vacío
+            }
+    }
+
+
     fun getResenias() {
         db.collection("resena")
             .get()
@@ -134,40 +215,38 @@ class ReseniasActivity : AppCompatActivity() {
                     val comentario = data["comentario"] as String
                     val estado = data["estado"] as Boolean
                     val fecha = data["fecha"] as Timestamp
-                    val jugador = data["jugador"] as String
+                    val jugador_id = data["jugador"] as String
+                    // se obtiene el nombre del jugador
+                    // Llama a la función para obtener el nombre del jugador de manera asíncrona
+                    getNombreJugador(jugador_id) { nombreJugador ->
+                        if (nombreJugador.isNotEmpty()) {
+                            val resenia = Resenia(comentario, estado, fecha, nombreJugador)
+                            reseniasList.add(resenia)// Notifica al adaptador sobre el cambio de datos
+                        }
+                    }
 
-                    val resenia = Resenia(comentario, estado, fecha, jugador)
-                    reseniasList.add(resenia)
                 }
                 if (reseniasList.isNotEmpty()) {
 
                     Toast.makeText(this@ReseniasActivity, "Sí hay comentarios disponibles", Toast.LENGTH_SHORT).show()
-
-                    // Convierte la lista de resenias a JSON
-                    //val gson = Gson()
-                    //val jsonData = gson.toJson(reseniasList)
-                    // Imprime el JSON en el logcat
-                    //Log.d("JSON", jsonData) // "JSON" es un identificador para encontrar más fácilmente el registro en logcat
-
-                    // La lista reseniasList se llena con comentarios
-                    //chargeListViewCompleja()
-                    //chargeListViewSimple()
 
                     // Agregar adaptador al RecyclerView
                     this.adapter = ReseniasAdapter(reseniasList)
                     recyclerView.adapter = adapter
 
                 } else {
+                    Toast.makeText(this@ReseniasActivity, reseniasList.size.toString(), Toast.LENGTH_SHORT).show()
                     // La lista está vacía, lo que significa que no se recuperaron comentarios
-                    Toast.makeText(this@ReseniasActivity, "No hay comentarios disponibles", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@ReseniasActivity, "No hay comentarios disponibles", Toast.LENGTH_SHORT).show()
+
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
             }
-    }
-}
+    }*/
 
+}
 
 
 /*
