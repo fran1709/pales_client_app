@@ -20,9 +20,9 @@
             android:theme="@style/Theme.Client_app.NoActionBar" />
         <activity
             android:name=".ReseniasActivity"
-
-            android:name=".RegisterActivity"
             android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"/>
         <activity
             android:name=".LoginActivity"
 
