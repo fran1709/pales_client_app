@@ -4,30 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="call_activity_menu_principal"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    tools:context=".LoginActivity">
 
-        android:text="Hello World!" />
+    <ImageView
+        android:layout_width="215dp"
+        android:layout_height="215dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="35dp"
+        android:contentDescription="TODO"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="Bienvenidos"
+        android:textColor="#172E4B"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_gravity="center"
+        android:text="Correo Electrónico:"
+        android:textColor="#172E4B" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_gravity="center"
+        android:text="Contraseña:"
+        android:textColor="#172E4B" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:hint="Contraseña"
+        android:inputType="textPassword" />
+
+    <CheckBox
+        android:id="@+id/checkRemember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="Recordar mi cuenta" />
+
+    <Button
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#172E4B"
+        android:backgroundTint="#172E4B"
+        android:onClick="logIn"
+        android:text="Iniciar Sesión"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="call_activity_menu_principal"
-        android:text="Menu Principal" />
-        android:onClick="callLogin"
-        android:text="Login" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#172E4B"
+        android:backgroundTint="#172E4B"
         android:onClick="callRegister"
-        android:text="Registro" />
+        android:text="Registrarse"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
+
 
 </LinearLayout>

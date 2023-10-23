@@ -51,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_search -> {
                 // Acción para el elemento de búsqueda
-                callLogin()
+                call_main_activity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -124,11 +124,10 @@ class RegisterActivity : AppCompatActivity() {
                 ).show()
             }
     }
-
-    fun callLogin() {
+    fun call_main_activity(){
         // Crear un Intent para iniciar la Activity2
-        val intent = Intent(this, LoginActivity::class.java)
-        // Iniciar la Activity2 utilizando el Intent
+        val intent = Intent(this, MainActivity::class.java)
+
         startActivity(intent)
     }
 }

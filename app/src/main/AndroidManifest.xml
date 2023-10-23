@@ -22,7 +22,8 @@
             android:name=".ReseniasActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"/>
+            android:name=".RegisterActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
 
