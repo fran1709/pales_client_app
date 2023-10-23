@@ -2,8 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="principal">#2F80ED</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="grey">#C7C7C7</color>
     <color name="my_light_primary">#FF6200EA</color>
     <color name="my_status_bar_color">#FF512DA8</color>
     <color name="my_navigation_bar_color">#FF512DA8</color>
-
 </resources>

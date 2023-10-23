@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,6 +122,16 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
 
         // Iniciar la Activity2 utilizando el Intent
+        startActivity(intent)
+    }
+
+
+    fun activityperfil(view: View){
+        val intent = Intent(this, MiPerfil::class.java)
+        startActivity(intent)
+    }
+    fun activitylistarusuarios(view: View){
+        val intent = Intent(this, ListarUsuarios::class.java)
         startActivity(intent)
     }
 }
