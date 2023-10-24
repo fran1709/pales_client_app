@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pales.ImagePagerAdapter
-import com.google.firebase.firestore.core.View
+import android.view.View
 
 class InformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
