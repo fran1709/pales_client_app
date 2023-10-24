@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_main.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Barra de navegación -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#172E4B"
+        android:title="Cancha Pales"
+        android:titleTextColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold">
+
+        <ImageView
+            android:id="@+id/userButton"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="User Button"
+            android:src="@drawable/ic_usuario"
+            app:tint="@color/white" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="243dp"
+        android:layout_height="97dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo_cancha" />
+
+    <!-- Título "Cancha Sintética Pale's" -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Cancha Pale's"
+        android:textColor="#172E4B"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <!-- Carrusel de fotografías (ViewPager2) -->
+
+    <!-- Título "Horarios" -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Horarios"
+        android:textColor="#172E4B"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Horario -->
+
+    <TextView
+        android:id="@+id/horarioTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Lunes a Domingo"
+        android:textAlignment="center"
+        android:textColor="#172E4B"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/horarioTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="5:00 AM - 10:00 PM"
+        android:textColor="#172E4B"
+        android:textSize="18sp" />
+
+    <!-- Título "Teléfonos" -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Teléfonos"
+        android:textColor="#172E4B"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Teléfonos -->
+    <TextView
+        android:id="@+id/phoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tel: 8409-2161 / 8839-9729"
+        android:textSize="18sp"
+        android:textColor="#172E4B"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:id="@+id/locationIcon"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:contentDescription="Ubicación"
+        android:onClick="openGoogleMaps"
+        android:src="@drawable/ic_ubicacion"
+        app:tint="@color/red" />
+
+
+</LinearLayout>
