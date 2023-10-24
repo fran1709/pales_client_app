@@ -2,8 +2,26 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Client_app" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/my_light_primary</item>
+
+        <!-- Cambiar el color de fondo de la barra de estado -->
+        <item name="android:statusBarColor">@color/black</item>
+
+        <!-- Cambiar el color de fondo de la barra de navegación -->
+        <item name="android:navigationBarColor">@color/black</item>
+
+        <!-- Cambia el color de los iconos del menú -->
+        <item name="android:colorControlNormal">@color/white</item>
+
+        <item name="android:icon">@color/white</item>
+
     </style>
 
     <style name="Theme.Client_app" parent="Base.Theme.Client_app" />
+    <style name="Theme.Client_app.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Client_app.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Client_app.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
