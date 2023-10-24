@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="15dp"
         android:layout_gravity="center"
         android:text="Correo Electrónico:"
@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="55dp"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="15dp"
         android:layout_gravity="center"
         android:text="Contraseña:"
@@ -54,7 +54,7 @@
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="55dp"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
@@ -83,7 +83,7 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#172E4B"
