@@ -1,17 +1,16 @@
-package com.example.pales
-
+package com.example.client_app
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.example.client_app.R
+import com.example.pales.ImagePagerAdapter
+import com.google.firebase.firestore.core.View
 
-class InfoActivity : AppCompatActivity() {
+class InformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_info)
+        setContentView(R.layout.activity_informacion)
 
         val imageResources = listOf(
             R.drawable.cancha1,

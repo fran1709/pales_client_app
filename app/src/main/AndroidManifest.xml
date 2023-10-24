@@ -6,14 +6,16 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/pales_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Client_app"
         tools:targetApi="31">
         <activity
-
+            android:name=".InformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".BuscarJugador"
             android:exported="false" />
         <activity
@@ -25,8 +27,7 @@
         <activity
             android:name=".ListarUsuarios"
             android:exported="false" />
-        <activity
-            android:name=".MiPerfil"/>
+        <activity android:name=".MiPerfil" />
         <activity
             android:name=".menu_principal"
             android:exported="false"
@@ -37,9 +38,6 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

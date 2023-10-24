@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/login_register_bg">
+
+    <ImageView
+        android:layout_width="215dp"
+        android:layout_height="215dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="35dp"
+        android:contentDescription="TODO"
+        app:srcCompat="@drawable/pales_logo" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -98,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:onClick="activitylistarusuarios"
+            android:onClick="call_info_lugar_activity"
             android:orientation="vertical"
             android:padding="16dp">
 

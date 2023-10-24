@@ -1,6 +1,7 @@
 package com.example.client_app
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -27,4 +28,10 @@ class menu_principal : AppCompatActivity() {
         val intent = Intent(this, ListarUsuarios::class.java)
         startActivity(intent)
     }
+    fun call_info_lugar_activity(view: View){
+        val intent = Intent(this, InformationActivity::class.java)
+        startActivity(intent)
+    }
+
+
 }

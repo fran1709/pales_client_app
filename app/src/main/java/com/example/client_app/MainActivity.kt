@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
         // Recuperar valores de SharedPreferences
         val correo: String? = sharedPreferences.getString("correo", "")
-        val contraseña: String? = sharedPreferences.getString("password", "")
+        val contrasenia: String? = sharedPreferences.getString("password", "")
         val estado : Boolean = sharedPreferences.getBoolean("recordar", false)
 
         if (estado){
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             val checkBoxRemember = findViewById<CheckBox>(R.id.checkRemember)
 
             email.setText(correo)
-            password.setText(contraseña)
+            password.setText(contrasenia)
             checkBoxRemember.isChecked = estado
         }
     }

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/login_register_bg">
 
     <ImageView
         android:layout_width="215dp"
@@ -13,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="35dp"
         android:contentDescription="TODO"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/pales_logo" />
 
     <TextView
         android:layout_width="wrap_content"
