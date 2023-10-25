@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
-    android:background="#2F80ED"
+    android:background="@drawable/pantallas3"
     android:orientation="vertical">
 
 
@@ -79,8 +79,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="12dp"
-        android:background="#FFFFFF"
+        android:layout_marginTop="25dp"
         android:orientation="vertical">
 
         <FrameLayout
