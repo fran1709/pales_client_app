@@ -104,36 +104,33 @@ class MiPerfil : AppCompatActivity() {
         val phone: TextView = findViewById(R.id.telefonoText)
         val clasificacion: TextView = findViewById(R.id.clasificacionText)
 
+        db.collection("jugadores")
+            .whereEqualTo("UID", id)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                for (document in documentSnapshot) {
+                    // Retrieve data from the document
+                    val playerName = document.getString("nombre")
+                    val playerNickname = document.getString("apodo")
+                    val playerPositions = document.get("posiciones") as List<String>?
+                    val playerBirthday = document.getString("fecha_nacimiento")
+                    val playerPhone = document.getString("telefono")
+                    val playerClasificacion = document.getString("clasificacion")
+                    val playerCorreo = document.getString("correo")
 
-        if (id != null) {
-            db.collection("jugadores")
-                .whereEqualTo("UID", id)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    for (document in documentSnapshot) {
-                        // Retrieve data from the document
-                        val playerName = document.getString("nombre")
-                        val playerNickname = document.getString("apodo")
-                        val playerPositions = document.get("posiciones") as List<String>?
-                        val playerBirthday = document.getString("fecha_nacimiento")
-                        val playerPhone = document.getString("telefono")
-                        val playerClasificacion = document.getString("clasificacion")
-                        val playerCorreo = document.getString("correo")
-
-                        // Update the TextViews with the retrieved data
-                        userName.text = "$playerName"
-                        nickname.text = "$playerNickname"
-                        position.text = "${playerPositions?.joinToString(", ")}"
-                        age.text = "$playerBirthday"
-                        phone.text = "$playerPhone"
-                        clasificacion.text = "$playerClasificacion"
-                        correoText.text = "$playerCorreo"
-                    }
+                    // Update the TextViews with the retrieved data
+                    userName.text = "$playerName"
+                    nickname.text = "$playerNickname"
+                    position.text = "${playerPositions?.joinToString(", ")}"
+                    age.text = "$playerBirthday"
+                    phone.text = "$playerPhone"
+                    clasificacion.text = "$playerClasificacion"
+                    correoText.text = "$playerCorreo"
                 }
-                .addOnFailureListener { exception ->
-                    // Handle failures
-                }
-        }
+            }
+            .addOnFailureListener { exception ->
+                // Handle failures
+            }
 
     }
     fun callActivityEditar(id : String?){

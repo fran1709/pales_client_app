@@ -15,20 +15,26 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
-data class Jugador1(val nombre: String, val apodo: String, val posiciones: List<String>)
+data class Jugador1(val id: String?, val nombre: String, val apodo: String, val posiciones: List<String>)
 
 class BuscarJugador : AppCompatActivity() {
     private val jugadoresList = mutableListOf<Jugador1>()
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_buscar_jugador)
 
         db = FirebaseFirestore.getInstance()
+        auth = Firebase.auth
+        val id = auth.currentUser?.uid
 
         val backButton: ImageButton = findViewById(R.id.backButton)
         val searchPlayerButton: ImageButton = findViewById(R.id.searchPlayer)
@@ -63,19 +69,22 @@ class BuscarJugador : AppCompatActivity() {
             finish()
         }
         // Cargar los datos de la colección "jugadores"
-        loadJugadoresData()
+        loadJugadoresData(id)
     }
-    private fun loadJugadoresData() {
+    private fun loadJugadoresData(id1 : String?) {
         val lv1: ListView = findViewById(R.id.lv1)
         db.collection("jugadores")
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
-                    val nombre = document.getString("nombre") ?: ""
-                    val apodo = document.getString("apodo") ?: ""
-                    val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
-                    val jugador = Jugador1(nombre, apodo, posiciones)
-                    jugadoresList.add(jugador)
+                    val id = document.getString("UID")
+                    if(id != id1) {
+                        val nombre = document.getString("nombre") ?: ""
+                        val apodo = document.getString("apodo") ?: ""
+                        val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
+                        val jugador = Jugador1(id, nombre, apodo, posiciones)
+                        jugadoresList.add(jugador)
+                    }
                 }
 
                 // Notificar al adaptador para que actualice la lista en el ListView

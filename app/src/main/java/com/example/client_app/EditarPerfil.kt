@@ -7,20 +7,27 @@ import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.text.Editable
 import android.widget.EditText
 import android.widget.ImageButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class EditarPerfil : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_perfil)
 
         db = FirebaseFirestore.getInstance()
+        auth = Firebase.auth
 
-        userData()
+        val id = auth.currentUser?.uid
+
+        userData(id)
 
     }
-    private fun userData() {
+    private fun userData(id : String?) {
         val userName: EditText = findViewById(R.id.etName)
         val nickname: EditText = findViewById(R.id.etnickname)
         val position: EditText = findViewById(R.id.etnPosicion)
@@ -30,7 +37,6 @@ class EditarPerfil : AppCompatActivity() {
         val saveProfile: ImageButton = findViewById(R.id.saveProfile)
         val backProfile: ImageButton = findViewById(R.id.backProfile)
 
-        val id = "h5GdAbTqbDOT8fbqX6GwIGGFokw1"
 
         db.collection("jugadores")
             .whereEqualTo("UID", id)
