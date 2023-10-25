@@ -61,6 +61,19 @@
         android:hint="Contraseña"
         android:inputType="textPassword" />
 
+    <Button
+        android:id="@+id/forgotPasswordB"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:onClick="resetPassword"
+        android:text="¿Olvidaste tu contraseña?"
+        android:textColor="#808080"
+        android:textColorHighlight="#252525"
+        android:textColorLink="#4E4E4E" />
+
     <CheckBox
         android:id="@+id/checkRemember"
         android:layout_width="wrap_content"

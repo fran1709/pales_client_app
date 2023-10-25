@@ -69,6 +69,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Función para recuperar contraseña
+    fun resetPassword(view: View) {
+        val email: EditText = findViewById(R.id.editTextEmail)
+
+        val emailAddress = email.text.toString()
+
+        if (emailAddress.isNotEmpty()) {
+            auth.sendPasswordResetEmail(emailAddress)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Se ha enviado un correo para restablecer la contraseña.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Error al enviar el correo de restablecimiento de contraseña.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        } else {
+            Toast.makeText(this, "Ingrese un correo electrónico válido.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     fun call_activity_menu_principal(){
         // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, menu_principal::class.java)
