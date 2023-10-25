@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="#2F80ED"
+        android:background="@drawable/pantallas3"
         android:orientation="vertical">
 
 
@@ -84,12 +84,10 @@
         </FrameLayout>
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
-            android:background="#FFFFFF"
             android:orientation="vertical">
 
             <FrameLayout
@@ -120,12 +118,12 @@
                         android:id="@+id/etnickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:layout_gravity="center"
                         android:text=""
-                        android:textAppearance="@style/profileAttributesText"/>
+                        android:textAppearance="@style/profileAttributesText" />
 
                 </LinearLayout>
 
@@ -165,12 +163,12 @@
                         android:id="@+id/etphone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:layout_gravity="center"
                         android:text=""
-                        android:textAppearance="@style/profileAttributesText"/>
+                        android:textAppearance="@style/profileAttributesText" />
 
                 </LinearLayout>
 
@@ -210,12 +208,12 @@
                         android:id="@+id/etAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:layout_gravity="center"
                         android:text=""
-                        android:textAppearance="@style/profileAttributesText"/>
+                        android:textAppearance="@style/profileAttributesText" />
 
                 </LinearLayout>
 
@@ -255,18 +253,16 @@
                         android:id="@+id/etnPosicion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:layout_gravity="center"
                         android:text=""
-                        android:textAppearance="@style/profileAttributesText"/>
+                        android:textAppearance="@style/profileAttributesText" />
 
                 </LinearLayout>
 
             </FrameLayout>
-
-
 
 
         </LinearLayout>
