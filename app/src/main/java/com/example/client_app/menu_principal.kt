@@ -32,5 +32,12 @@ class menu_principal : AppCompatActivity() {
         val intent = Intent(this, InformationActivity::class.java)
         startActivity(intent)
     }
-    
+    fun activityPromociones(view: View){
+        val intent = Intent(this, ListarPromociones::class.java)
+        startActivity(intent)
+    }
+    fun activityEventos(view: View){
+        val intent = Intent(this, ListarEventos::class.java)
+        startActivity(intent)
+    }
 }
