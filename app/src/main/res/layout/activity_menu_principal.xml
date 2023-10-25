@@ -2,6 +2,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
     android:background="@drawable/login_register_bg">
 
     <FrameLayout
@@ -47,7 +50,6 @@
             android:icon="@drawable/people_icon"
             android:text="Usuarios" />
 
-
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabProfile"
             android:layout_width="0dp"
@@ -55,5 +57,18 @@
             android:icon="@drawable/ic_usuario"
             android:text="Mi Perfil" />
 
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabPromociones"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/baseline_monetization_on_24"
+            android:text="Promos" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabEventos"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/baseline_calendar_month_24"
+            android:text="Eventos" />
     </com.google.android.material.tabs.TabLayout>
 </RelativeLayout>

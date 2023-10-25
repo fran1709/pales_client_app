@@ -29,6 +29,24 @@
             android:exported="false" />
         <activity android:name=".MiPerfil" />
         <activity
+            android:name=".ListarPromociones"
+            android:exported="false" />
+        <activity
+            android:name=".DetallePromocion"
+            android:exported="false" />
+        <activity
+            android:name=".BuscarPromocion"
+            android:exported="false" />
+        <activity
+            android:name=".ListarEventos"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleEvento"
+            android:exported="false" />
+        <activity
+            android:name=".BuscarEvento"
+            android:exported="false" />
+        <activity
             android:name=".menu_principal"
             android:exported="false"
             android:label="@string/title_activity_menu_principal"

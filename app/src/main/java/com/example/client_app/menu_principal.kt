@@ -49,6 +49,16 @@ class menu_principal : AppCompatActivity() {
                         //startActivity(intent)
                         startForResult.launch(intent)
                     }
+                    4 -> {
+                        val intent = Intent(this@menu_principal, ListarPromociones::class.java)
+                        //startActivity(intent)
+                        startForResult.launch(intent)
+                    }
+                    5 -> {
+                        val intent = Intent(this@menu_principal, ListarEventos::class.java)
+                        //startActivity(intent)
+                        startForResult.launch(intent)
+                    }
                     // Agrega más casos según tus necesidades
                 }
             }
@@ -72,6 +82,12 @@ class menu_principal : AppCompatActivity() {
                     }
                     3 -> {
                         activityperfil()
+                    }
+                    4 -> {
+                        activityPromociones()
+                    }
+                    5 -> {
+                        activityEventos()
                     }
                     // Agrega más casos según tus necesidades
                 }
@@ -99,6 +115,12 @@ class menu_principal : AppCompatActivity() {
         val intent = Intent(this, InformationActivity::class.java)
         startActivity(intent)
     }
-
-    
+    fun activityPromociones(){
+        val intent = Intent(this, ListarPromociones::class.java)
+        startActivity(intent)
+    }
+    fun activityEventos(){
+        val intent = Intent(this, ListarEventos::class.java)
+        startActivity(intent)
+    }
 }
