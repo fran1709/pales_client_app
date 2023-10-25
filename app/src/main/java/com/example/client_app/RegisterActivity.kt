@@ -144,7 +144,7 @@ class RegisterActivity : AppCompatActivity() {
 
         if (emptyInputsCheck() && positionCheck()){
             val usuario = hashMapOf(
-                "email" to email,
+                "correo" to email,
                 "contrasena" to passEncrypt,
                 "nombre" to fullName.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
                 "telefono" to phoneNumber,
