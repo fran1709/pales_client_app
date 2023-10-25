@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ReseniasAdapter(private val reseniasList: List<Resenia>) : RecyclerView.Adapter<ReseniasAdapter.ViewHolder>() {
+class ReseniasAdapter(private var reseniasList: List<Resenia>) : RecyclerView.Adapter<ReseniasAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val jugadorTextView: TextView = itemView.findViewById(R.id.jugadorTextView)
@@ -23,7 +23,10 @@ class ReseniasAdapter(private val reseniasList: List<Resenia>) : RecyclerView.Ad
         holder.jugadorTextView.text = resenia.jugador
         holder.comentarioTextView.text = resenia.comentario
     }
-
+    fun updateData(newData: List<Resenia>) {
+        reseniasList = newData
+        notifyDataSetChanged() // Notifica al RecyclerView sobre los cambios en los datos
+    }
     override fun getItemCount(): Int {
         return reseniasList.size
     }

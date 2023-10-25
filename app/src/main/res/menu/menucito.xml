@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
+
     <item
         android:id="@+id/nuevoComentario"
-        android:icon="@android:drawable/sym_action_chat"
+        android:icon="@android:drawable/ic_menu_search"
         android:title="Agregar"
         app:showAsAction="ifRoom" />
 </menu>

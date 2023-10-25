@@ -1,129 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp"
     android:background="@drawable/login_register_bg">
 
-    <ImageView
-        android:layout_width="215dp"
-        android:layout_height="215dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="35dp"
-        android:contentDescription="TODO"
-        app:srcCompat="@drawable/pales_logo" />
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tabLayout" >
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        <ImageView
+            android:layout_width="215dp"
+            android:layout_height="215dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="35dp"
+            android:contentDescription="TODO"
+            app:srcCompat="@drawable/pales_logo" />
+    </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFF"
-            android:onClick="activityperfil"
-            android:orientation="vertical"
-            android:padding="16dp">
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:text="Información" />
 
-            <TextView
-                android:id="@+id/menuItemTextView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/cardview_default_radius"
-                android:text="Mi perfil"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabReviews"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/stat_notify_chat"
+            android:text="Reseñas" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabUsers"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/people_icon"
+            android:text="Usuarios" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFF"
-            android:onClick="activitylistarusuarios"
-            android:orientation="vertical"
-            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/menuItemTextView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/cardview_default_radius"
-                android:text="Listar Usuarios"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/ic_usuario"
+            android:text="Mi Perfil" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFF"
-            android:onClick="callActivityResenias"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/menuItemTextView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/cardview_default_radius"
-                android:text="Reseñas"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFF"
-            android:onClick="call_info_lugar_activity"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/menuItemTextView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/cardview_default_radius"
-                android:text="Información del Lugar"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Agrega más CardView para otras opciones -->
-
-</LinearLayout>
+    </com.google.android.material.tabs.TabLayout>
+</RelativeLayout>
