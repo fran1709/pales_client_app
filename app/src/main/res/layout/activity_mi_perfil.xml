@@ -291,48 +291,6 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:contentDescription="@string/attributeBackgroundDesc"
-                android:src="@drawable/profile_data_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp">
-
-                <TextView
-                    android:id="@+id/clasificacion"
-                    style="@style/profileAttributes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="Clasificación: " />
-
-                <TextView
-                    android:id="@+id/clasificacionText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="classificationText"
-                    android:textAppearance="@style/profileAttributesText" />
-
-            </LinearLayout>
-
-        </FrameLayout>
 
 
     </LinearLayout>

@@ -35,6 +35,7 @@ class ListarUsuarios : AppCompatActivity() {
         val id = auth.currentUser?.uid
 
         usersListData(id)
+        val backProfile: ImageButton = findViewById(R.id.backButton)
 
         val searchPlayer: ImageButton = findViewById(R.id.searchPlayer)
         searchPlayer.setOnClickListener {
@@ -45,6 +46,10 @@ class ListarUsuarios : AppCompatActivity() {
                 val data: android.content.Intent? = result.data
 
             }
+        }
+        backProfile.setOnClickListener {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
     private fun usersListData(id1 : String?) {

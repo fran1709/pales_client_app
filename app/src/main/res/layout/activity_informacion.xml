@@ -4,49 +4,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@drawable/login_register_bg"
     android:orientation="vertical">
 
     <!-- Barra de navegación -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#172E4B"
-        android:title="Cancha Pales"
-        android:titleTextColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold">
 
-        <ImageView
-            android:id="@+id/userButton"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="User Button"
-            android:src="@drawable/ic_usuario"
-            app:tint="@color/white" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- Logo -->
+    <!-- Logo
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="243dp"
-        android:layout_height="97dp"
+        android:layout_height="130dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo_cancha" />
+        android:layout_marginTop="25dp"
+        android:src="@drawable/pales_logo" />-->
 
     <!-- Título "Cancha Sintética Pale's" -->
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="70dp"
+        android:shadowColor="@color/principal"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="10"
         android:text="Cancha Pale's"
-        android:textColor="#172E4B"
-        android:textSize="34sp"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"
         android:textStyle="bold" />
 
     <!-- Carrusel de fotografías (ViewPager2) -->
@@ -56,7 +43,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="80dp" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#172E4B"
+        android:background="@color/principal2"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
@@ -204,10 +204,11 @@
                 android:layout_height="55dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:background="#172E4B"
+                android:background="@color/principal2"
                 android:onClick="registerButtonClicked"
                 android:text="Registrar"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textColorLink="@color/principal2" />
         </LinearLayout>
     </ScrollView>
 

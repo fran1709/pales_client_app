@@ -92,6 +92,7 @@
         android:onClick="logIn"
         android:text="Iniciar Sesión"
         android:textAllCaps="true"
+        android:textColorLink="@color/principal2"
         android:textStyle="bold" />
 
     <Button

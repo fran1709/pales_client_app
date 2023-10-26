@@ -5,7 +5,11 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
+
+private lateinit var startForResult: ActivityResultLauncher<Intent>
 
 class menu_principal : AppCompatActivity() {
     private lateinit var tabLayout:TabLayout;
@@ -15,6 +19,13 @@ class menu_principal : AppCompatActivity() {
 
         tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         toolbar_navigator()
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == androidx.appcompat.app.AppCompatActivity.RESULT_OK) {
+                val data: android.content.Intent? = result.data
+
+            }
+        }
     }
 
     fun toolbar_navigator(){
@@ -31,11 +42,12 @@ class menu_principal : AppCompatActivity() {
                     }
                     2 -> {
                         val intent = Intent(this@menu_principal, ListarUsuarios::class.java)
-                        startActivity(intent)
+                        startForResult.launch(intent)
                     }
                     3 -> {
                         val intent = Intent(this@menu_principal, MiPerfil::class.java)
-                        startActivity(intent)
+                        //startActivity(intent)
+                        startForResult.launch(intent)
                     }
                     // Agrega más casos según tus necesidades
                 }
@@ -87,5 +99,6 @@ class menu_principal : AppCompatActivity() {
         val intent = Intent(this, InformationActivity::class.java)
         startActivity(intent)
     }
+
     
 }

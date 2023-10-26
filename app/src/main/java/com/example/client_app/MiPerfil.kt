@@ -46,8 +46,6 @@ class MiPerfil : AppCompatActivity() {
                 val age1 = data?.getStringExtra("age")
                 val phone1 = data?.getStringExtra("phone")
 
-                val collection = db.collection("jugadores")
-                val document = collection.document("fI66gzILBfx48DrIpSQ2")
 
                 val nuevosDatos = mapOf(
                     "nombre" to nombre1,
@@ -57,39 +55,85 @@ class MiPerfil : AppCompatActivity() {
                     "telefono" to phone1
                     // Agrega otros campos y sus nuevos valores aquí
                 )
-
-
-                document.update("nombre", nombre1.toString())
-                    .addOnSuccessListener {
-                        // Éxito, los datos se han actualizado correctamente
-                        userData(id)
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("nombre", nombre1.toString())
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
                     }
-                    .addOnFailureListener { exception ->
-                        // Maneja cualquier error
+                    .addOnFailureListener { e ->
+                        // Handle the error
                     }
-                document.update("apodo", apodo1.toString())
-                    .addOnSuccessListener {
-                        // Éxito, los datos se han actualizado correctamente
-                        userData(id)
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("apodo", apodo1.toString())
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
                     }
-                    .addOnFailureListener { exception ->
-                        // Maneja cualquier error
+                    .addOnFailureListener { e ->
+                        // Handle the error
                     }
-                document.update("fecha_nacimiento", age1.toString())
-                    .addOnSuccessListener {
-                        // Éxito, los datos se han actualizado correctamente
-                        userData(id)
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("fecha_nacimiento", age1.toString())
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
                     }
-                    .addOnFailureListener { exception ->
-                        // Maneja cualquier error
+                    .addOnFailureListener { e ->
+                        // Handle the error
                     }
-                document.update("telefono", phone1.toString())
-                    .addOnSuccessListener {
-                        // Éxito, los datos se han actualizado correctamente
-                        userData(id)
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("telefono", phone1.toString())
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
                     }
-                    .addOnFailureListener { exception ->
-                        // Maneja cualquier error
+                    .addOnFailureListener { e ->
+                        // Handle the error
                     }
             }
         }
@@ -102,7 +146,8 @@ class MiPerfil : AppCompatActivity() {
         val position: TextView = findViewById(R.id.posicionText)
         val age: TextView = findViewById(R.id.edadText)
         val phone: TextView = findViewById(R.id.telefonoText)
-        val clasificacion: TextView = findViewById(R.id.clasificacionText)
+
+        val backProfile: ImageButton = findViewById(R.id.backButton)
 
         db.collection("jugadores")
             .whereEqualTo("UID", id)
@@ -115,7 +160,6 @@ class MiPerfil : AppCompatActivity() {
                     val playerPositions = document.get("posiciones") as List<String>?
                     val playerBirthday = document.getString("fecha_nacimiento")
                     val playerPhone = document.getString("telefono")
-                    val playerClasificacion = document.getString("clasificacion")
                     val playerCorreo = document.getString("correo")
 
                     // Update the TextViews with the retrieved data
@@ -124,14 +168,16 @@ class MiPerfil : AppCompatActivity() {
                     position.text = "${playerPositions?.joinToString(", ")}"
                     age.text = "$playerBirthday"
                     phone.text = "$playerPhone"
-                    clasificacion.text = "$playerClasificacion"
                     correoText.text = "$playerCorreo"
                 }
             }
             .addOnFailureListener { exception ->
                 // Handle failures
             }
-
+        backProfile.setOnClickListener {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
     fun callActivityEditar(id : String?){
         // Crear un Intent para iniciar la Activity
@@ -139,6 +185,14 @@ class MiPerfil : AppCompatActivity() {
         intent.putExtra("idUser",id)
         // Iniciar la Activity2 utilizando el Intent
         startForResult.launch(intent)
+    }
+    fun callActivity1(){
+        // Crear un Intent para iniciar la Activity
+        val intent = Intent(this, menu_principal::class.java)
+        setResult(RESULT_OK, intent)
+        finish()
+        // Iniciar la Activity1 utilizando el Intent
+        //startActivity(intent)
     }
 
 }
