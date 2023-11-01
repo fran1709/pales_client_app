@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Loading comments..."
+        android:text="@string/loading_comments"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
@@ -66,12 +66,13 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         app:backgroundTint="#2196F3"
-        app:elevation="6dp"
+        app:elevation="20dp"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/sym_action_chat"
         app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/crear_rese_a" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFiltrar"
@@ -80,11 +81,12 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         app:backgroundTint="#2196F3"
-        app:elevation="6dp"
+        app:elevation="20dp"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_menu_search"
         app:tint="@color/white"
         app:layout_constraintBottom_toTopOf="@id/fabAgregarComentario"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/buscar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

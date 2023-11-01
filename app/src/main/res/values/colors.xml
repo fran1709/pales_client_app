@@ -16,4 +16,5 @@
     <color name="my_light_primary">#FF6200EA</color>
     <color name="my_status_bar_color">#FF512DA8</color>
     <color name="my_navigation_bar_color">#FF512DA8</color>
+    <color name="highlightColor">#FFA500</color>
 </resources>

@@ -73,5 +73,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="buscar">Buscar…</string>
+    <string name="loading_comments">Loading comments…</string>
+    <string name="crear_rese_a">Crear reseña</string>
+    <string name="nombre_del_jugador">Nombre del Jugador</string>
+    <string name="texto_del_comentario">Texto del Comentario</string>
+    <string name="logo">Logo</string>
 
 </resources>

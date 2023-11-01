@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/cardview_default_radius"
-        android:text="Nombre del Jugador"
+        android:text="@string/nombre_del_jugador"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -27,7 +27,7 @@
         android:id="@+id/comentarioTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Texto del Comentario"
+        android:text="@string/texto_del_comentario"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 
