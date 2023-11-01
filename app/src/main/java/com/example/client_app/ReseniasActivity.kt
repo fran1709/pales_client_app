@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ListenerRegistration
 
 data class Resenia(
+    val docuemntID: String,
     val comentario: String,
     val estado: Boolean,
     val fecha: Timestamp,
@@ -42,7 +43,8 @@ class ReseniasActivity : AppCompatActivity() {
     private var commentsListener: ListenerRegistration? = null
     private var isLoading = true
     private lateinit var userID: String
-    private  var userNombre = ""
+    private var userNombre = ""
+    private var documentID = ""
     private val commentClickListener = object : OnCommentClickListener {
         override fun onCommentClick(resenia: Resenia) {
             // Lógica para editar el comentario al hacer clic en él
@@ -97,7 +99,7 @@ class ReseniasActivity : AppCompatActivity() {
                         val fechaTimestamp = data?.get("fecha") as? Timestamp
                         val fecha = fechaTimestamp ?: Timestamp.now()
                         val jugador_id = data?.get("jugador") as? String ?: ""
-                        Resenia(comentario, estado, fecha, jugador_id)
+                        Resenia(document.id, comentario, estado, fecha, jugador_id)
                     }
 
                     reseniasList.clear()
@@ -319,9 +321,27 @@ class ReseniasActivity : AppCompatActivity() {
 
     // Función para actualizar el comentario editado en Firebase
     private fun updateComentario(resenia: Resenia, editedComment: String) {
-        // Aquí se debe realizar la lógica para actualizar el comentario editado en Firebase
-        // Utiliza Firebase.firestore para actualizar el comentario en la base de datos
-        // Recuerda manejar errores y notificar al usuario si la actualización fue exitosa
+        val comentarioDocument = db.collection("resena").document(resenia.docuemntID)
+
+        // Crear un HashMap con los campos a actualizar
+        val updatedData = hashMapOf(
+            "comentario" to editedComment,
+            "estado" to true, // Deja este valor en "true" si es necesario
+            "jugador" to userID,
+            "fecha" to FieldValue.serverTimestamp()
+        )
+
+        comentarioDocument.update(updatedData)
+            .addOnSuccessListener {
+                // Notificar al usuario sobre la actualización exitosa
+                Toast.makeText(this, "Comentario actualizado exitosamente", Toast.LENGTH_SHORT).show()
+                loadResenias()
+            }
+            .addOnFailureListener { e ->
+                // Manejar el error y notificar al usuario
+                Log.w(TAG, "Error al actualizar el comentario", e)
+                Toast.makeText(this, "Error al actualizar el comentario", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun obtenerNombreUsuario(userID: String, onCompletion: (String) -> Unit) {
@@ -387,7 +407,7 @@ class ReseniasActivity : AppCompatActivity() {
                     val estado = data?.get("estado") as? Boolean ?: false
                     val fecha = data?.get("fecha") as? Timestamp ?: Timestamp.now()
                     val jugador_id = data?.get("jugador") as? String ?: ""
-                    Resenia(comentario, estado, fecha, jugador_id)
+                    Resenia(document.id,comentario, estado, fecha, jugador_id)
                 }
                 loadJugadores(resenias)
             }
@@ -423,7 +443,7 @@ class ReseniasActivity : AppCompatActivity() {
     private fun combineReseniasAndJugadores(resenias: List<Resenia>, jugadores: Map<String, String>) {
         val reseniasConNombres = resenias.mapNotNull { resenia ->
             val jugadorNombre = jugadores[resenia.jugador]
-            jugadorNombre?.let { Resenia(resenia.comentario, resenia.estado, resenia.fecha, it) }
+            jugadorNombre?.let { Resenia(resenia.docuemntID,resenia.comentario, resenia.estado, resenia.fecha, it) }
         }
 
         // Update the LiveData with the new data
