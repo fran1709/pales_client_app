@@ -79,5 +79,15 @@
     <string name="nombre_del_jugador">Nombre del Jugador</string>
     <string name="texto_del_comentario">Texto del Comentario</string>
     <string name="logo">Logo</string>
+    <string name="logo_de_fondo">logo_de_fondo</string>
+    <string name="promos">promos</string>
+    <string name="promociones">Promociones</string>
+    <string name="informaci_n">Información</string>
+    <string name="rese_as">Reseñas</string>
+    <string name="usuarios">Usuarios</string>
+    <string name="mi_perfil">Mi Perfil</string>
+    <string name="reservas">Reservas</string>
+    <string name="eventos">Eventos</string>
+    <string name="p_les_cachas_sint_ticas">Pale´s Cachas Sintéticas</string>
 
 </resources>
