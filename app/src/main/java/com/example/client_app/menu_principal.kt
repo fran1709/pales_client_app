@@ -1,10 +1,9 @@
 package com.example.client_app
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
@@ -26,6 +25,10 @@ class menu_principal : AppCompatActivity() {
 
             }
         }
+
+        // Cambiar el título del Toolbar
+        val titleTextView: TextView = findViewById(R.id.textView)
+        titleTextView.text = "Pale's Cachas Sintéticas"
     }
 
     fun toolbar_navigator(){
@@ -49,7 +52,6 @@ class menu_principal : AppCompatActivity() {
                         //startActivity(intent)
                         startForResult.launch(intent)
                     }
-                    // Agrega más casos según tus necesidades
                 }
             }
 
@@ -73,17 +75,13 @@ class menu_principal : AppCompatActivity() {
                     3 -> {
                         activityperfil()
                     }
-                    // Agrega más casos según tus necesidades
                 }
             }
         })
     }
 
     fun callActivityResenias(){
-        // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, ReseniasActivity::class.java)
-
-        // Iniciar la Activity2 utilizando el Intent
         startActivity(intent)
     }
 
