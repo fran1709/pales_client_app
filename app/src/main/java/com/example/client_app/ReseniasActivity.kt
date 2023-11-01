@@ -41,10 +41,24 @@ class ReseniasActivity : AppCompatActivity() {
     private lateinit var adapter: ReseniasAdapter
     private var commentsListener: ListenerRegistration? = null
     private var isLoading = true
+    private lateinit var userID: String
+    private  var userNombre = ""
+    private val commentClickListener = object : OnCommentClickListener {
+        override fun onCommentClick(resenia: Resenia) {
+            // Lógica para editar el comentario al hacer clic en él
+            showEditDialog(resenia)
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resenias)
+
+        // Obtener el userID o asignarlo según corresponda
+        userID = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+
 
         initializeUI()
 
@@ -278,6 +292,62 @@ class ReseniasActivity : AppCompatActivity() {
         val dialog = builder.create()
         dialog.show()
     }
+    // Función para mostrar el diálogo de edición
+    private fun showEditDialog(resenia: Resenia) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Editar Comentario")
+
+        val input = EditText(this)
+        input.setText(resenia.comentario)
+        builder.setView(input)
+
+        builder.setPositiveButton("Aceptar") { dialog: DialogInterface, _ ->
+            val editedComment = input.text.toString()
+            if (editedComment.isNotEmpty()) {
+                updateComentario(resenia, editedComment)
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog: DialogInterface, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    // Función para actualizar el comentario editado en Firebase
+    private fun updateComentario(resenia: Resenia, editedComment: String) {
+        // Aquí se debe realizar la lógica para actualizar el comentario editado en Firebase
+        // Utiliza Firebase.firestore para actualizar el comentario en la base de datos
+        // Recuerda manejar errores y notificar al usuario si la actualización fue exitosa
+    }
+
+    private fun obtenerNombreUsuario(userID: String, onCompletion: (String) -> Unit) {
+        db.collection("jugadores")
+            .get()
+            .addOnSuccessListener { result ->
+                var userNombre = ""
+
+                for (document in result) {
+                    val id = document.data["UID"].toString()
+                    val nombre = document.data["nombre"] as? String ?: ""
+
+                    if (id == userID) {
+                        userNombre = nombre
+                    }
+                }
+
+                onCompletion(userNombre) // Llamada de devolución para retornar el nombre del usuario
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error obteniendo documentos", exception)
+                onCompletion("") // Llamada de devolución con nombre vacío en caso de error
+            }
+    }
+
+
 
     private fun initializeUI() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -288,7 +358,13 @@ class ReseniasActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = ReseniasAdapter(reseniasList)
+
+        obtenerNombreUsuario(userID) { userNombre ->
+            adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre)
+            recyclerView.adapter = adapter
+        }
+
+        adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre)
         recyclerView.adapter = adapter
 
         reseniasLiveData.value = reseniasList
@@ -296,6 +372,7 @@ class ReseniasActivity : AppCompatActivity() {
         // Set the loading state to true
         isLoading = true
     }
+
     /**
      * @author Francisco Ovares Rojas
      * Método encargado de cargar las reseñas de la base de datos. Método principal.
