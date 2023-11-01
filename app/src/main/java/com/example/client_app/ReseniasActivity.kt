@@ -6,16 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,7 +41,6 @@ class ReseniasActivity : AppCompatActivity() {
     private lateinit var adapter: ReseniasAdapter
     private var commentsListener: ListenerRegistration? = null
     private var isLoading = true
-    private var filtro: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +55,11 @@ class ReseniasActivity : AppCompatActivity() {
         val fabAgregarComentario = findViewById<FloatingActionButton>(R.id.fabAgregarComentario)
         fabAgregarComentario.setOnClickListener {
             showComentarioDialog()
+        }
+
+        val fabFiltrar = findViewById<FloatingActionButton>(R.id.fabFiltrar)
+        fabFiltrar.setOnClickListener {
+            showSearchDialog()
         }
 
         // Oculta el RecyclerView y la vista de espera al principio
@@ -98,7 +99,7 @@ class ReseniasActivity : AppCompatActivity() {
     }
 
 
-
+    @Suppress("DEPRECATION")
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -109,12 +110,13 @@ class ReseniasActivity : AppCompatActivity() {
         return true
     }
 
-    //funcion para filtrar
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return false;
-    }
-
-    fun createComentario(comentario: String, estado: Boolean, jugador: String) {
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de crear el comentario y cargarlo en la BD.
+     * @param estado Boolean que representa el estado del comentario (false)=no se muestra, (true)=se muestra
+     * @param comentario String que representa la cadena de texto obtenida del usuario.
+     */
+    private fun createComentario(comentario: String, estado: Boolean) {
         val mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
         val userID = user?.uid
@@ -142,13 +144,21 @@ class ReseniasActivity : AppCompatActivity() {
                     db.collection("resena")
                         .add(nuevoComentario)
                         .addOnSuccessListener { documentReference ->
-                            Toast.makeText(this@ReseniasActivity, "¡Comentario creado con éxito!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@ReseniasActivity,
+                                "¡Comentario creado con éxito!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             // Cargar los comentarios nuevamente después de un breve retraso
                             loadReseniasWithDelay()
                         }
                         .addOnFailureListener { e ->
                             Log.w(TAG, "Error al crear el comentario", e)
-                            Toast.makeText(this@ReseniasActivity, "Error al crear el comentario", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@ReseniasActivity,
+                                "Error al crear el comentario",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                             // Oculta la vista de espera y muestra el RecyclerView
                             progressBar.visibility = View.GONE
@@ -161,6 +171,71 @@ class ReseniasActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de mostrar el Dialog para filtrar las reseñas.
+     */
+    private fun showSearchDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Buscar por nombre")
+
+        val input = EditText(this)
+        input.hint = "Ingrese un nombre"
+        builder.setView(input)
+
+        builder.setPositiveButton("Buscar") { dialog: DialogInterface, _ ->
+            val nombre = input.text.toString()
+            if (nombre.isNotEmpty()) {
+                // Lógica para buscar el nombre ingresado
+                buscarPorNombre(nombre)
+            } else {
+                // Manejar el caso cuando el campo está vacío
+                // Aquí podrías mostrar un mensaje de error, por ejemplo
+                Toast.makeText(this, "Ingrese un nombre para buscar", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog: DialogInterface, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de filtrar por nombre los comentarios.
+     * @param nombre String que recibe el nombre a buscar.
+     */
+    private fun buscarPorNombre(nombre: String) {
+        reseniasLiveData.value?.let { comentarios ->
+            val comentariosFiltrados = comentarios.filter { resenia ->
+                resenia.jugador.contains(nombre, ignoreCase = true)
+            }
+
+            if (comentariosFiltrados.isEmpty()) {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("No se encontraron comentarios")
+                builder.setMessage("¿Mostrar todos los comentarios?")
+                builder.setPositiveButton("Sí") { dialog, _ ->
+                    loadResenias() // Mostrar todos los comentarios
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val dialog = builder.create()
+                dialog.show()
+            } else {
+                reseniasLiveData.value = comentariosFiltrados // Mostrar comentarios filtrados
+            }
+        }
+    }
+
+
+    @Suppress("DEPRECATION")
     private fun loadReseniasWithDelay() {
         // Agrega un retraso antes de cargar los comentarios nuevamente
         Handler().postDelayed({
@@ -169,16 +244,16 @@ class ReseniasActivity : AppCompatActivity() {
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
         commentsListener?.remove()
     }
 
-    fun showComentarioDialog() {
-        val mAuth = FirebaseAuth.getInstance()
-        val user = mAuth.currentUser
-        val userID = user?.uid
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de mostrar el Dialog para crear un comentario.
+     */
+    private fun showComentarioDialog() {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Agregar Comentario")
@@ -190,7 +265,8 @@ class ReseniasActivity : AppCompatActivity() {
         builder.setPositiveButton("Aceptar") { dialog: DialogInterface, _ ->
             val comentario = input.text.toString()
             if (comentario.isNotEmpty()) {
-                createComentario(comentario, true, userID.toString())
+                // TODO: ACA SE PONDRIA ESTADO EN FALSO PARA EL QUE ADMINISTRADOR LE DE ACEPTAR O RECHAZAR.
+                createComentario(comentario, true)
             }
             dialog.dismiss()
         }
@@ -220,7 +296,10 @@ class ReseniasActivity : AppCompatActivity() {
         // Set the loading state to true
         isLoading = true
     }
-
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de cargar las reseñas de la base de datos. Método principal.
+     */
     private fun loadResenias() {
         db.collection("resena")
             .get()
@@ -240,7 +319,10 @@ class ReseniasActivity : AppCompatActivity() {
             }
 
     }
-
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de cargar los jugadores de la base de datos. Método secundario.
+     */
     private fun loadJugadores(resenias: List<Resenia>) {
         db.collection("jugadores")
             .get()
@@ -257,6 +339,10 @@ class ReseniasActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * @author Francisco Ovares Rojas
+     * Método encargado de cargar los reseniasLiveData con la información  actualizada (nombre, comentario).
+     */
     private fun combineReseniasAndJugadores(resenias: List<Resenia>, jugadores: Map<String, String>) {
         val reseniasConNombres = resenias.mapNotNull { resenia ->
             val jugadorNombre = jugadores[resenia.jugador]

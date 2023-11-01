@@ -4,8 +4,8 @@
     android:background="@android:color/white">
 
     <item
-        android:id="@+id/nuevoComentario"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="Agregar"
+        android:id="@+id/logo"
+        android:icon="@drawable/pales_logo"
+        android:title="@string/logo"
         app:showAsAction="ifRoom" />
 </menu>
