@@ -17,21 +17,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 
-data class Evento(val descripcion: String, val estado: Boolean, val fecha: String,  val imagen_url: String, val nombre: String)
+data class Reserva(val encargado: String, val equipo: Boolean, val estado: Boolean, val horario: String, val retadores: List<String>, val tipo: String)
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
 
-class ListarEventos : AppCompatActivity() {
+class ListarReservas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listar_eventos)
+        setContentView(R.layout.activity_listar_reservas)
         db = FirebaseFirestore.getInstance()
 
-        eventosListData()
+        reservasListData()
 
-        val searchEvento: ImageButton = findViewById(R.id.searchEventos)
-        searchEvento.setOnClickListener {
+        val searchReserva: ImageButton = findViewById(R.id.searchReservas)
+        searchReserva.setOnClickListener {
             activitybuscarEvento()
         }
 
@@ -49,62 +49,59 @@ class ListarEventos : AppCompatActivity() {
         }
     }
 
-    private fun eventosListData() {
-        val eventosCollection = db.collection("evento_especial")
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    private fun reservasListData() {
+        val reservasCollection = db.collection("reservas")
 
-        eventosCollection.whereEqualTo("estado", true)
+        reservasCollection.whereEqualTo("estado", true)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val eventosList = mutableListOf<Evento>()
+                val reservasList = mutableListOf<Reserva>()
 
                 for (document in querySnapshot) {
-                    val nombre = document.getString("nombre") ?: ""
-                    val descripcion = document.getString("descripcion") ?: ""
+                    val encargado = document.getString("encargado") ?: ""
+                    val equipo = document.getBoolean("equipo") ?: false
                     val estado = document.getBoolean("estado") ?: false
-                    val fecha = document.getDate("fecha") ?: Date()
-                    val imagenUrl = document.getString("imagen_url") ?: ""
-                    val fechaFormateada = dateFormat.format(fecha)
+                    val horario = document.getString("horario") ?: ""
+                    val retadores = document.get("retadores") as? List<String> ?: emptyList()
+                    val tipo = document.getString("tipo") ?: ""
 
-                    val evento = Evento(
-                        descripcion = descripcion,
+                    val reservas = Reserva(
+                        encargado = encargado,
+                        equipo = equipo,
                         estado = estado,
-                        fecha = fechaFormateada,
-                        imagen_url = imagenUrl,
-                        nombre = nombre
+                        horario = horario,
+                        retadores = retadores,
+                        tipo = tipo
                     )
-                    eventosList.add(evento)
+                    reservasList.add(reservas)
                 }
-                displayEventos(eventosList)
+                displayReservas(reservasList)
             }
             .addOnFailureListener { exception ->
                 // Handle failures
             }
     }
 
-    private fun displayEventos(eventosList: List<Evento>) {
+    private fun displayReservas(reservasList: List<Reserva>) {
         val listView: ListView = findViewById(R.id.lv1)
-        val adapter = EventoAdapter(this, eventosList)
+        val adapter = ReservasAdapter(this, reservasList)
         listView.adapter = adapter
     }
 
-    class EventoAdapter(context: Context, private val eventos: List<Evento>) : ArrayAdapter<Evento>(context, 0, eventos) {
+    class ReservasAdapter(context: Context, private val reservas: List<Reserva>) : ArrayAdapter<Reserva>(context, 0, reservas) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var itemView = convertView
             if (itemView == null) {
                 itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
             }
 
-            val evento = eventos[position]
-            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Nombre: ${evento.nombre}\nFecha: ${evento.fecha}"
+            val reserva = reservas[position]
+            //itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Reserva: ${reserva.nombre}"
+            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Reserva: "
 
             itemView?.setOnClickListener {
-                val intent = Intent(context, DetalleEvento::class.java)
-                intent.putExtra("nombre", evento.nombre)
-                intent.putExtra("descripcion", evento.descripcion)
-                intent.putExtra("estado", evento.estado)
-                intent.putExtra("fecha", evento.fecha)
-                intent.putExtra("imagen_url", evento.imagen_url)
+                val intent = Intent(context, DetalleReserva::class.java)
+                //intent.putExtra("nombre", evento.nombre)
                 context.startActivity(intent)
             }
             return itemView!!
