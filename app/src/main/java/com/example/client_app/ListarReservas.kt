@@ -10,17 +10,39 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.ListView
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
-data class Reserva(val encargado: String, val equipo: Boolean, val estado: Boolean, val horario: String, val retadores: List<String>, val tipo: String)
+data class Reserva(
+    val encargado: String,
+    val nombreEncargado: String,
+    val estado: Boolean,
+    val horario: String,
+    val hora: String,
+    val clasificacion: String,
+    val jugadores: List<JugadorReserva>,
+    val retadores: List<JugadorReserva>,
+    val tipo: String
+)
+
+data class JugadorReserva(
+    val aceptado: Boolean,
+    val clasificacion: String,
+    val posicion: List<String>,
+    val apodo: String,
+    val uidJugador: String
+)
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
+private val reservaList = mutableListOf<Reserva>()
 
 class ListarReservas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,16 +51,32 @@ class ListarReservas : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         reservasListData()
-
-        val searchReserva: ImageButton = findViewById(R.id.searchReservas)
-        searchReserva.setOnClickListener {
-            activitybuscarEvento()
-        }
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 val data: Intent? = result.data
-                // Handle the result if needed
+            }
+        }
+
+        val searchPromotion: ImageButton = findViewById(R.id.crearReservas)
+        searchPromotion.setOnClickListener {
+            activityCrearReserva()
+        }
+
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radioButtonIndividual -> {
+                    val reservasFiltradas = reservaList.filter { it.retadores.size < 6 }
+                    displayReservas(reservasFiltradas)
+                }
+                R.id.radioButtonGrupal -> {
+                    val reservasFiltradas = reservaList.filter { it.retadores.isEmpty() }
+                    displayReservas(reservasFiltradas)
+                }
+                else -> {
+                    displayReservas(reservaList)
+                }
             }
         }
 
@@ -51,35 +89,62 @@ class ListarReservas : AppCompatActivity() {
 
     private fun reservasListData() {
         val reservasCollection = db.collection("reservas")
-
         reservasCollection.whereEqualTo("estado", true)
+            //TODO borrar esta línea-------------------------------------------------------------------------------------------
+            //.whereNotEqualTo("tipo", "privada")
+            //TODO borrar esta línea-------------------------------------------------------------------------------------------
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val reservasList = mutableListOf<Reserva>()
+                reservaList.clear()
 
                 for (document in querySnapshot) {
-                    val encargado = document.getString("encargado") ?: ""
-                    val equipo = document.getBoolean("equipo") ?: false
-                    val estado = document.getBoolean("estado") ?: false
-                    val horario = document.getString("horario") ?: ""
-                    val retadores = document.get("retadores") as? List<String> ?: emptyList()
-                    val tipo = document.getString("tipo") ?: ""
-
-                    val reservas = Reserva(
-                        encargado = encargado,
-                        equipo = equipo,
-                        estado = estado,
-                        horario = horario,
-                        retadores = retadores,
-                        tipo = tipo
-                    )
-                    reservasList.add(reservas)
+                    val reserva = mapFirebaseDocumentToReserva(document)
+                    reservaList.add(reserva)
                 }
-                displayReservas(reservasList)
+                displayReservas(reservaList)
             }
-            .addOnFailureListener { exception ->
-                // Handle failures
+            .addOnFailureListener { exception ->  }
+    }
+
+    // Función para convertir un documento de Firebase a un objeto Reserva
+    fun mapFirebaseDocumentToReserva(document: DocumentSnapshot): Reserva {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+
+        val encargado = document.getString("encargado") ?: ""
+        val nombreEncargado = document.getString("nombreEncargado") ?: ""
+        val estado = document.getBoolean("estado") ?: false
+        val horario = document.getString("horario") ?: ""
+        val clasificacion = document.getString("clasificacion") ?: ""
+        val hora = document.getDate("hora") ?: Date()
+        val horaFormateada = dateFormat.format(hora)
+        val jugadoresList = mapFirebaseJugadoresList(document.get("jugadores"))
+        val retadoresList = mapFirebaseJugadoresList(document.get("retadores"))
+        val tipo = document.getString("tipo") ?: ""
+
+        return Reserva(encargado, nombreEncargado , estado, horario, horaFormateada, clasificacion ,jugadoresList ,retadoresList, tipo)
+    }
+
+    // Mapper de los jugadores
+    fun mapFirebaseJugadoresList(jugadores: Any?): List<JugadorReserva> {
+        val retadoresList = mutableListOf<JugadorReserva>()
+
+        if (jugadores is List<*>) {
+            for (jugadorItem in jugadores) {
+                if (jugadorItem is Map<*, *>) {
+                    val aceptado = jugadorItem["aceptado"] as? Boolean ?: false
+                    val clasificacionOriginal = jugadorItem["clasificacion"] as? String ?: ""
+                    val clasificacionNormalizada = normalizarClasificacion(clasificacionOriginal)
+                    val posicion = jugadorItem["posicion"] as? List<*> ?: emptyList<Any>()
+                    val apodo = jugadorItem["apodo"] as? String ?: ""
+                    val uidJugador = jugadorItem["uidJugador"] as? String ?: ""
+
+                    val jugador = JugadorReserva(aceptado, clasificacionNormalizada, posicion.map { it.toString() }, apodo, uidJugador)
+                    retadoresList.add(jugador)
+                }
             }
+        }
+
+        return retadoresList
     }
 
     private fun displayReservas(reservasList: List<Reserva>) {
@@ -96,8 +161,7 @@ class ListarReservas : AppCompatActivity() {
             }
 
             val reserva = reservas[position]
-            //itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Reserva: ${reserva.nombre}"
-            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Reserva: "
+            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Reserva de ${reserva.nombreEncargado}\n${reserva.hora}"
 
             itemView?.setOnClickListener {
                 val intent = Intent(context, DetalleReserva::class.java)
@@ -108,13 +172,22 @@ class ListarReservas : AppCompatActivity() {
         }
     }
 
+    fun normalizarClasificacion(clasificacionActual: String): String {
+        val clasificacionLower = clasificacionActual.toLowerCase()
+        return when {
+            clasificacionLower == "regular" -> "regular"
+            clasificacionLower == "bueno" || clasificacionLower == "good" -> "bueno"
+            clasificacionLower == "malo" || clasificacionLower == "bad" -> "malo"
+            else -> clasificacionLower
+        }
+    }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
 
-    fun activitybuscarEvento() {
-        val intent = Intent(this, BuscarEvento::class.java)
+    fun activityCrearReserva() {
+        val intent = Intent(this, CrearReserva::class.java)
         startForResult.launch(intent)
     }
 }

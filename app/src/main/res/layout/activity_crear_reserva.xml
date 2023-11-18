@@ -7,15 +7,29 @@
     android:layout_marginTop="0dp"
     android:layout_marginBottom="0dp"
     android:orientation="vertical"
+    android:background="@drawable/pantallas2"
     tools:context=".RegisterActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/principal2"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="67dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@string/backButtonDescription"
+            android:src="@drawable/arrow_back_white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +38,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:text="Creación de Reserva"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textColor="#FFFFFF" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,24 +49,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
-                android:text="Encargado" />
-
-            <EditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="350dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:hint="Ingresar Engarcargado?"
-                android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -78,7 +75,7 @@
                         android:id="@+id/individualCheck"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Individual" />
+                        android:text="Privada" />
 
                 </LinearLayout>
 
@@ -91,7 +88,7 @@
                         android:id="@+id/grupoCheck"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Grupo" />
+                        android:text="Pública" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -103,16 +100,17 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:text="Retadores" />
+                android:text="Jugadores" />
 
-            <EditText
-                android:id="@+id/editTextRetadores"
+            <MultiAutoCompleteTextView
+                android:id="@+id/multiAutoCompleteJugadores"
                 android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:hint="Ver Como Ingreso a Retadores"
-                android:inputType="textEmailAddress" />
+                android:hint="Seleccione Jugadores"
+                android:textSize="16sp"
+                android:completionThreshold="1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -121,16 +119,17 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:text="Horario" />
+                android:text="Horario"
+                android:textSize="16dp"/>
 
-            <EditText
-                android:id="@+id/editTextHorario"
+            <Spinner
+                android:id="@+id/spinnerHorario"
                 android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:hint="Ver Como Selecciono Horario"
-                android:inputType="textEmailAddress" />
+                android:layout_marginTop="16dp"
+                android:hint="Seleccione un Horario"
+                android:textSize="20dp"/>
 
             <Button
                 android:id="@+id/btnRegister"
@@ -139,8 +138,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:background="@color/principal2"
-                android:onClick="registerButtonClicked"
-                android:text="Registrar"
+                android:text="Crear Reserva"
                 android:textColor="#FFFFFF"
                 android:textColorLink="@color/principal2" />
         </LinearLayout>
