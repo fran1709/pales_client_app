@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -40,6 +40,7 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/FRLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -69,6 +70,8 @@
     </FrameLayout>
 
     <LinearLayout
+        android:layout_below="@id/FRLayout"
+        android:layout_above="@id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="12dp"
@@ -82,4 +85,44 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
-</LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/CustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:tabBackground="@android:color/transparent"
+        app:tabIconTint="@color/principal">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:text="@string/informaci_n" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabReviews"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/stat_notify_chat"
+            android:text="@string/rese_as" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabUsers"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/people_icon"
+            android:text="@string/usuarios" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/ic_usuario"
+            android:text="@string/mi_perfil" />
+
+    </com.google.android.material.tabs.TabLayout>
+</RelativeLayout>

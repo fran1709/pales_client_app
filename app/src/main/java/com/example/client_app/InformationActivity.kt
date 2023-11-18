@@ -1,4 +1,6 @@
 package com.example.client_app
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +8,14 @@ import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pales.ImagePagerAdapter
 import android.view.View
+import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.tabs.TabLayout
 
 class InformationActivity : AppCompatActivity() {
+    private lateinit var tabLayout:TabLayout;
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_informacion)
@@ -20,6 +28,27 @@ class InformationActivity : AppCompatActivity() {
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val imagePagerAdapter = ImagePagerAdapter(this, imageResources)
         viewPager.adapter = imagePagerAdapter
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == androidx.appcompat.app.AppCompatActivity.RESULT_OK) {
+                val data: android.content.Intent? = result.data
+
+            }
+        }
+
+        tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        toolbar_navigator()
+
+        // Cambiar el título del Toolbar
+        val titleTextView: TextView = findViewById(R.id.textView)
+        titleTextView.text = "Pale's Cachas Sintéticas"
+
+        // Obtener la posición de la pestaña seleccionada del Intent
+        val selectedTabPosition = intent.getIntExtra("selectedTab", -1)
+        if (selectedTabPosition != -1) {
+            // Establecer la pestaña seleccionada en el TabLayout
+            tabLayout.getTabAt(selectedTabPosition)?.select()
+        }
     }
 
     fun openGoogleMaps(view: View) {
@@ -31,5 +60,99 @@ class InformationActivity : AppCompatActivity() {
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         mapIntent.setPackage("com.google.android.apps.maps") // Abre Google Maps
         startActivity(mapIntent)
+    }
+
+    private fun toolbar_navigator(){
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        if (!isCurrentActivity(InformationActivity::class.java)) {
+                            val intent = Intent(this@InformationActivity, InformationActivity::class.java)
+                            intent.putExtra("selectedTab", 0) // Agregar posición como extra
+                            call_info_lugar_activity()
+                        }
+                    }
+                    1 -> {
+                        if (!isCurrentActivity(ReseniasActivity::class.java)) {
+                            val intent = Intent(this@InformationActivity, ReseniasActivity::class.java)
+                            intent.putExtra("selectedTab", 1) // Agregar posición como extra
+                            callActivityResenias()
+                        }
+                    }
+                    2 -> {
+                        if (!isCurrentActivity(ListarUsuarios::class.java)) {
+                            val intent = Intent(this@InformationActivity, ListarUsuarios::class.java)
+                            intent.putExtra("selectedTab", 2) // Agregar posición como extra
+                            activitylistarusuarios()
+                        }
+                    }
+                    3 -> {
+                        if (!isCurrentActivity(MiPerfil::class.java)) {
+                            val intent = Intent(this@InformationActivity, MiPerfil::class.java)
+                            intent.putExtra("selectedTab", 2) // Agregar posición como extra
+                            activityperfil()
+                        }
+                    }
+                }
+            }
+
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // No es necesario implementar nada aquí de momento
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Si la pestaña está seleccionada, también realiza la acción correspondiente
+                when (tab?.position) {
+                    0 -> {
+                        if (!isCurrentActivity(InformationActivity::class.java)) {
+                            call_info_lugar_activity()
+                        }
+                    }
+                    1 -> {
+                        if (!isCurrentActivity(ReseniasActivity::class.java)) {
+                            callActivityResenias()
+                        }
+                    }
+                    2 -> {
+                        if (!isCurrentActivity(ListarUsuarios::class.java)) {
+                            activitylistarusuarios()
+                        }
+                    }
+                    3 -> {
+                        if (!isCurrentActivity(MiPerfil::class.java)) {
+                            activityperfil()
+                        }
+                    }
+                }
+            }
+        })
+    }
+    fun isCurrentActivity(activityClass: Class<*>): Boolean {
+        val manager = (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val runningTaskInfoList = manager.getRunningTasks(1)
+        if (runningTaskInfoList.isNotEmpty()) {
+            val topActivity = runningTaskInfoList[0].topActivity
+            return topActivity?.className == activityClass.name
+        }
+        return false
+    }
+    fun callActivityResenias(){
+        val intent = Intent(this, ReseniasActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun activityperfil(){
+        val intent = Intent(this, MiPerfil::class.java)
+        startActivity(intent)
+    }
+    fun activitylistarusuarios(){
+        val intent = Intent(this, ListarUsuarios::class.java)
+        startActivity(intent)
+    }
+    fun call_info_lugar_activity(){
+        val intent = Intent(this, InformationActivity::class.java)
+        startActivity(intent)
     }
 }

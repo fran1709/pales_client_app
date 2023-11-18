@@ -12,8 +12,6 @@ interface OnCommentClickListener {
     fun onCommentClick(resenia: Resenia)
 }
 
-
-
 class ReseniasAdapter(
     private var reseniasList: List<Resenia>,
     private val clickListener: OnCommentClickListener,

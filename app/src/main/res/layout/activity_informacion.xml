@@ -1,117 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_register_bg">
 
-    android:background="@drawable/login_register_bg"
-    android:orientation="vertical">
-
-    <!-- Barra de navegación -->
-
-    <!-- Logo
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="243dp"
-        android:layout_height="130dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/pales_logo" />-->
-
-    <!-- Título "Cancha Sintética Pale's" -->
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="354dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="70dp"
-        android:shadowColor="@color/principal"
-        android:shadowDx="10"
-        android:shadowDy="10"
-        android:shadowRadius="10"
-        android:text="Cancha Pale's"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
-    <!-- Carrusel de fotografías (ViewPager2) -->
-
-    <!-- Título "Horarios" -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="80dp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/principal2"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <!-- Texto -->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                tools:ignore="RelativeOverlap" />
+
+            <!-- Logo -->
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/pales_logo" />
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/tabLayout"
+        android:background="@drawable/login_register_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="70dp"
+            android:shadowColor="@color/principal"
+            android:shadowDx="10"
+            android:shadowDy="10"
+            android:shadowRadius="10"
+            android:text="Cancha Pale's"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="80dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Horarios"
+            android:textColor="#172E4B"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/horarioTextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Lunes a Domingo"
+            android:textAlignment="center"
+            android:textColor="#172E4B"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/horarioTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="5:00 AM - 10:00 PM"
+            android:textColor="#172E4B"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Teléfonos"
+            android:textColor="#172E4B"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Tel: 8409-2161 / 8839-9729"
+            android:textColor="#172E4B"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/locationIcon"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:contentDescription="Ubicación"
+            android:scaleType="fitCenter"
+            android:onClick="openGoogleMaps"
+            android:src="@drawable/ic_ubicacion"
+            app:tint="@color/red" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/CustomTabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Horarios"
-        android:textColor="#172E4B"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:tabBackground="@android:color/transparent"
+        app:tabIconTint="@color/principal">
 
-    <!-- Horario -->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:text="@string/informaci_n" />
 
-    <TextView
-        android:id="@+id/horarioTextView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Lunes a Domingo"
-        android:textAlignment="center"
-        android:textColor="#172E4B"
-        android:textSize="18sp" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabReviews"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/stat_notify_chat"
+            android:text="@string/rese_as" />
 
-    <TextView
-        android:id="@+id/horarioTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
-        android:text="5:00 AM - 10:00 PM"
-        android:textColor="#172E4B"
-        android:textSize="18sp" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabUsers"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/people_icon"
+            android:text="@string/usuarios" />
 
-    <!-- Título "Teléfonos" -->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/ic_usuario"
+            android:text="@string/mi_perfil" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Teléfonos"
-        android:textColor="#172E4B"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    </com.google.android.material.tabs.TabLayout>
 
-    <!-- Teléfonos -->
-    <TextView
-        android:id="@+id/phoneTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tel: 8409-2161 / 8839-9729"
-        android:textSize="18sp"
-        android:textColor="#172E4B"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <ImageView
-        android:id="@+id/locationIcon"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:contentDescription="Ubicación"
-        android:onClick="openGoogleMaps"
-        android:src="@drawable/ic_ubicacion"
-        app:tint="@color/red" />
-
-
-</LinearLayout>
+</RelativeLayout>

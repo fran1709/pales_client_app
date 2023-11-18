@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Auto layout, variables, and unit scale are not yet supported -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frame_6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    android:background="@drawable/pantallas3"
-    android:orientation="vertical">
+    android:background="@drawable/pantallas3">
 
 
     <LinearLayout
+        android:id="@+id/linearLY"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/backButton"
@@ -45,7 +42,10 @@
             android:contentDescription="@string/peopleButtonDescription"
             android:src="@drawable/delete_icon" />
     </LinearLayout>
+
     <FrameLayout
+        android:layout_below="@id/linearLY"
+        android:id="@+id/frameLY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -75,14 +75,15 @@
     </FrameLayout>
 
 
-
     <LinearLayout
+        android:layout_below="@id/frameLY"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="25dp"
         android:orientation="vertical">
 
         <FrameLayout
+            android:id="@+id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -90,6 +91,7 @@
 
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -292,8 +294,46 @@
         </FrameLayout>
 
 
-
     </LinearLayout>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/CustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:tabBackground="@android:color/transparent"
+        app:tabIconTint="@color/principal">
 
-</LinearLayout>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:text="@string/informaci_n" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabReviews"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@android:drawable/stat_notify_chat"
+            android:text="@string/rese_as" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabUsers"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/people_icon"
+            android:text="@string/usuarios" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:icon="@drawable/ic_usuario"
+            android:text="@string/mi_perfil" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+</RelativeLayout>
