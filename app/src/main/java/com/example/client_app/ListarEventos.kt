@@ -41,6 +41,12 @@ class ListarEventos : AppCompatActivity() {
                 // Handle the result if needed
             }
         }
+
+        val backProfile: ImageButton = findViewById(R.id.backButton)
+        backProfile.setOnClickListener {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     private fun eventosListData() {

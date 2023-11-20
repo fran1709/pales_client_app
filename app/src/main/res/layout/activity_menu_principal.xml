@@ -56,6 +56,7 @@
 
             <!-- Opción 1 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/reservas"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="8dp">
@@ -191,6 +192,5 @@
             android:layout_height="0dp"
             android:icon="@drawable/ic_usuario"
             android:text="@string/mi_perfil" />
-
     </com.google.android.material.tabs.TabLayout>
 </RelativeLayout>

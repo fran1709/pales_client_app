@@ -44,6 +44,15 @@
             android:name=".ListarEventos"
             android:exported="false" />
         <activity
+            android:name=".ListarReservas"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleReserva"
+            android:exported="false" />
+        <activity
+            android:name=".CrearReserva"
+            android:exported="false" />
+        <activity
             android:name=".DetalleEvento"
             android:exported="false" />
         <activity

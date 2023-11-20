@@ -36,12 +36,16 @@ class menu_principal : AppCompatActivity() {
 
         val promocionesCardView: CardView = findViewById(R.id.promociones)
         promocionesCardView.setOnClickListener {
-            activityEventos()
+            activityPromociones()
         }
 
         val eventosCardView: CardView = findViewById(R.id.eventos)
         eventosCardView.setOnClickListener {
             activityEventos()
+        }
+        val reservasCardView: CardView = findViewById(R.id.reservas)
+        reservasCardView.setOnClickListener {
+            activityReservas()
         }
     }
 
@@ -143,6 +147,10 @@ class menu_principal : AppCompatActivity() {
     fun call_activity_aprobar_resenias(View:View){
         // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, AprobarResenia::class.java)
+    }
+    fun activityReservas(){
+        val intent = Intent(this, ListarReservas::class.java)
+        startActivity(intent)
     }
     fun activityPromociones(){
         val intent = Intent(this, ListarPromociones::class.java)
