@@ -1,12 +1,17 @@
 package com.example.client_app
 
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.text.Editable
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,6 +20,9 @@ import com.google.firebase.ktx.Firebase
 class EditarPerfil : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    lateinit var textViewFechanacimiento: TextView
+    lateinit var fechaCovertida: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_perfil)
@@ -30,9 +38,12 @@ class EditarPerfil : AppCompatActivity() {
     private fun userData(id : String?) {
         val userName: EditText = findViewById(R.id.etName)
         val nickname: EditText = findViewById(R.id.etnickname)
-        val position: EditText = findViewById(R.id.etnPosicion)
-        val age: EditText = findViewById(R.id.etAge)
         val phone: EditText = findViewById(R.id.etphone)
+        val porteroCheck1 = findViewById<CheckBox>(R.id.porteroCheck1)
+        val defensaCheck1 = findViewById<CheckBox>(R.id.defensaCheck1)
+        val medioCheck1 = findViewById<CheckBox>(R.id.medioCheck1)
+        val delanteroCheck1 = findViewById<CheckBox>(R.id.delanteroCheck1)
+        textViewFechanacimiento = findViewById(R.id.fechaNacimientoEdit)
 
         val saveProfile: ImageButton = findViewById(R.id.saveProfile)
         val backProfile: ImageButton = findViewById(R.id.backProfile)
@@ -46,16 +57,56 @@ class EditarPerfil : AppCompatActivity() {
                     // Retrieve data from the document
                     val playerName = document.getString("nombre")
                     val playerNickname = document.getString("apodo")
-                    //val playerPositions = document.get("posiciones") as List<String>?
                     val playerBirthday = document.getString("fecha_nacimiento")
+                    if (!playerBirthday.isNullOrBlank()) {
+                        textViewFechanacimiento.text = playerBirthday
+                        fechaCovertida = playerBirthday // Asegúrate de que fechaCovertida sea del mismo tipo que necesitas
+                    }
                     val playerPhone = document.getString("telefono")
+                    val playerPositions = document.get("posiciones") as List<*>?
+
+                    porteroCheck1.isChecked = playerPositions?.contains("Portero") == true
+                    defensaCheck1.isChecked = playerPositions?.contains("Defensa") == true
+                    medioCheck1.isChecked = playerPositions?.contains("Mediocampista") == true
+                    delanteroCheck1.isChecked = playerPositions?.contains("Delantero") == true
+
 
                     // Update the TextViews with the retrieved data
                     userName.setText(playerName)
                     nickname.setText(playerNickname)
-                    //position.text = playerToEditable(playerPositions?.joinToString(", "))
-                    age.setText(playerBirthday)
                     phone.setText(playerPhone)
+                    textViewFechanacimiento.setOnClickListener {
+                        var calendar: Calendar = Calendar.getInstance()
+                        var year = calendar.get(Calendar.YEAR)
+                        var month = calendar.get(Calendar.MONTH)
+                        var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+                        // Crea una instancia del DatePickerDialog y muestra el selector de fecha
+
+                        val datePickerDialog = DatePickerDialog(
+                            this, android.R.style.Theme_Material_Dialog,
+                            { view, year, month, dayOfMonth ->
+                                // La fecha seleccionada por el usuario
+                                val fechaSeleccionada = "$dayOfMonth/${month + 1}/$year"
+                                // Aquí puedes hacer algo con la fecha seleccionada, por ejemplo, mostrarla en un TextView
+
+
+                                // Crea una instancia de Calendar y configura la fecha seleccionada
+                                val calendario = Calendar.getInstance()
+                                calendario.set(Calendar.YEAR, year)
+                                calendario.set(Calendar.MONTH, month) // Ten en cuenta que los meses comienzan desde 0 en Calendar
+                                calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                                // Obtiene el Timestamp de la fecha seleccionada
+                                textViewFechanacimiento.text = fechaSeleccionada
+                                fechaCovertida = calendario.timeInMillis.toString()
+
+                            },
+                            year, month, day
+                        )
+                        datePickerDialog.datePicker.maxDate = calendar.timeInMillis
+                        datePickerDialog.show()
+                    }
                 }
             }
 
@@ -63,7 +114,13 @@ class EditarPerfil : AppCompatActivity() {
                 // Handle failures
             }
         saveProfile.setOnClickListener {
-            callActivity1(userName.text.toString(), nickname.text.toString(), position.text.toString(), age.text.toString(), phone.text.toString())
+            val selectedPositions = mutableListOf<String>()
+            if (porteroCheck1.isChecked) selectedPositions.add("Portero")
+            if (defensaCheck1.isChecked) selectedPositions.add("Defensa")
+            if (medioCheck1.isChecked) selectedPositions.add("Mediocampista")
+            if (delanteroCheck1.isChecked) selectedPositions.add("Delantero")
+
+            callActivity1(userName.text.toString(), nickname.text.toString(), selectedPositions.joinToString(", "), fechaCovertida, phone.text.toString())
         }
         backProfile.setOnClickListener {
             setResult(RESULT_CANCELED);
@@ -75,7 +132,7 @@ class EditarPerfil : AppCompatActivity() {
         val intent = Intent(this, MiPerfil::class.java)
         intent.putExtra("nombre", nombre)
         intent.putExtra("apodo", apodo)
-        //intent.putExtra("posicion", posicion)
+        intent.putExtra("posicion", posicion)
         intent.putExtra("age", age)
         intent.putExtra("phone", phone)
         setResult(RESULT_OK, intent)

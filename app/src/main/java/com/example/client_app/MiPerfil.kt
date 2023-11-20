@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,7 +29,7 @@ class MiPerfil : AppCompatActivity() {
         auth = Firebase.auth
 
         val editProfile: ImageButton = findViewById(R.id.editProfile)
-
+        val btnEliminarCuenta: ImageButton = findViewById(R.id.deleteProfile)
         val id = auth.currentUser?.uid
 
         userData(id)
@@ -36,13 +37,17 @@ class MiPerfil : AppCompatActivity() {
         editProfile.setOnClickListener {
             callActivityEditar(id)
         }
+        btnEliminarCuenta.setOnClickListener {
+            mostrarDialogoConfirmacion()
+        }
+
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == androidx.appcompat.app.AppCompatActivity.RESULT_OK) {
                 val data: android.content.Intent? = result.data
                 val nombre1 = data?.getStringExtra("nombre")
                 val apodo1 = data?.getStringExtra("apodo")
-                //val posicion1 = data?.getStringExtra("posicion")
+                val posiciones1 = data?.getStringExtra("posicion")?.split(",") ?: emptyList()
                 val age1 = data?.getStringExtra("age")
                 val phone1 = data?.getStringExtra("phone")
 
@@ -50,11 +55,31 @@ class MiPerfil : AppCompatActivity() {
                 val nuevosDatos = mapOf(
                     "nombre" to nombre1,
                     "apodo" to apodo1,
-                    //"posicion" to posicion1,
+                    "posicion" to posiciones1,
                     "fecha_nacimiento" to age1,
                     "telefono" to phone1
                     // Agrega otros campos y sus nuevos valores aquí
                 )
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("posiciones", posiciones1)
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle the error
+                    }
                 db.collection("jugadores")
                     .whereEqualTo("UID", id)
                     .get()
@@ -178,6 +203,43 @@ class MiPerfil : AppCompatActivity() {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+    fun mostrarDialogoConfirmacion() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirmar eliminación")
+        builder.setMessage("¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.")
+
+        builder.setPositiveButton("Eliminar") { _, _ ->
+            eliminarCuenta()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+    private fun eliminarCuenta() {
+        val user = auth.currentUser
+
+        user?.delete()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    cerrarSesionYVolverAlMainActivity()
+                } else {
+                    // Hubo un error al eliminar la cuenta
+                    // Puedes manejar el error según sea necesario
+                }
+            }
+    }
+    private fun cerrarSesionYVolverAlMainActivity() {
+        auth.signOut()
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finishAffinity()
     }
     fun callActivityEditar(id : String?){
         // Crear un Intent para iniciar la Activity

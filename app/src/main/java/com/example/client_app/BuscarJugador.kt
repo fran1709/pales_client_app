@@ -15,6 +15,8 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,9 +25,12 @@ import java.util.Locale
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
+private lateinit var recyclerView3: RecyclerView
+
 data class Jugador1(val id: String?, val nombre: String, val apodo: String, val posiciones: List<String>)
 
 class BuscarJugador : AppCompatActivity() {
+    private lateinit var adapter: JugadorAdapter // Agrega esta línea
     private val jugadoresList = mutableListOf<Jugador1>()
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +44,7 @@ class BuscarJugador : AppCompatActivity() {
         val backButton: ImageButton = findViewById(R.id.backButton)
         val searchPlayerButton: ImageButton = findViewById(R.id.searchPlayer)
         val searchInput: EditText = findViewById(R.id.etBuscarJugador)
-        val lv1: ListView = findViewById(R.id.lv1)
+
 
         //usersListData()
 
@@ -48,9 +53,10 @@ class BuscarJugador : AppCompatActivity() {
                 val data: android.content.Intent? = result.data
             }
         }
-        // Configura un adaptador vacío para el ListView
-        val adapter = JugadorAdapter(this, mutableListOf())
-        lv1.adapter = adapter
+        recyclerView3 = findViewById(R.id.recyclerView3)
+        recyclerView3.layoutManager = LinearLayoutManager(this)
+        adapter = JugadorAdapter(this)
+        recyclerView3.adapter = adapter
 
         // Maneja el clic en el botón de búsqueda
         searchPlayerButton.setOnClickListener {
@@ -72,7 +78,6 @@ class BuscarJugador : AppCompatActivity() {
         loadJugadoresData(id)
     }
     private fun loadJugadoresData(id1 : String?) {
-        val lv1: ListView = findViewById(R.id.lv1)
         db.collection("jugadores")
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -88,58 +93,42 @@ class BuscarJugador : AppCompatActivity() {
                 }
 
                 // Notificar al adaptador para que actualice la lista en el ListView
-                val adapter = lv1.adapter as JugadorAdapter
+
                 adapter.updateData(jugadoresList)
             }
             .addOnFailureListener { exception ->
                 println("Ocurrió un error: ${exception.message}")
             }
     }
-//    private fun usersListData() {
-//        val jugadoresCollection = db.collection("jugadores")
-//
-//        jugadoresCollection.get()
-//            .addOnSuccessListener { querySnapshot ->
-//                val jugadoresList = mutableListOf<Jugador1>()
-//
-//                for (document in querySnapshot) {
-//                    val nombre = document.getString("nombre") ?: ""
-//                    val apodo = document.getString("apodo") ?: ""
-//                    val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
-//                    val jugador = Jugador1(nombre, apodo, posiciones) //AGREGAR ID
-//                    jugadoresList.add(jugador)
-//                }
-//
-//                // Mostrar los datos en el ListView
-//                displayJugadores(jugadoresList)
-//            }
-//            .addOnFailureListener { exception ->
-//                // Handle failures
-//            }
-//    }
-//    private fun displayJugadores(jugadoresList: MutableList<Jugador1>) {
-//        val listView: ListView = findViewById(R.id.lv1)
-//        val adapter = JugadorAdapter(this, jugadoresList)
-//        listView.adapter = adapter
-//    }
-    class JugadorAdapter(context: Context, private val jugadores: MutableList<Jugador1>) : ArrayAdapter<Jugador1>(context, 0, jugadores) {
+    class JugadorAdapter(private val context: Context) :
+        RecyclerView.Adapter<JugadorAdapter.ViewHolder>() {
+
+        private val jugadores: MutableList<Jugador1> = mutableListOf()
         fun updateData(newData: List<Jugador1>) {
             jugadores.clear()
             jugadores.addAll(newData)
             notifyDataSetChanged()
         }
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var itemView = convertView
-            if (itemView == null) {
-                itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
-            }
-
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val tvJugadorInfo: TextView = itemView.findViewById(R.id.tvJugadorInfo)
+            val tvPositionInfo: TextView = itemView.findViewById(R.id.tvPositionInfo)
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val itemView = LayoutInflater.from(context).inflate(R.layout.item_jugador, parent, false)
+            return ViewHolder(itemView)
+        }
+        override fun getItemCount(): Int {
+            return jugadores.size
+        }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val jugador = jugadores[position]
-            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Nombre: ${jugador.nombre}  Posición: ${jugador.posiciones.joinToString(", ")}"
 
-            itemView?.setOnClickListener {
+            holder.tvJugadorInfo.text = jugador.nombre
+            holder.tvPositionInfo.text = "Posición: ${jugador.posiciones.joinToString(", ")}"
+
+            holder.itemView.setOnClickListener {
                 db.collection("jugadores")
-                    .whereEqualTo("nombre", jugador.nombre) //VERIFICAR POR ID NO POR NOMBRE
+                    .whereEqualTo("UID", jugador.id) //VERIFICAR POR ID NO POR NOMBRE
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
                         for (document in documentSnapshot) {0
@@ -164,8 +153,6 @@ class BuscarJugador : AppCompatActivity() {
                     }
 
             }
-
-            return itemView!!
         }
     }
     fun activityperfiljugador(view: View){
