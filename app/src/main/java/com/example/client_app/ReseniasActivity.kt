@@ -323,7 +323,7 @@ class ReseniasActivity : AppCompatActivity() {
         // Crear un HashMap con los campos a actualizar
         val updatedData = hashMapOf(
             "comentario" to editedComment,
-            "estado" to true, // Deja este valor en "true" si es necesario
+            "estado" to false, // se coloca como falso para que aparezca en la vista del admin para volver a aprobar/rechazar
             "jugador" to userID,
             "fecha" to FieldValue.serverTimestamp()
         )
