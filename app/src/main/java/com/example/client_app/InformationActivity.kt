@@ -12,22 +12,47 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
+import android.os.Handler
 
 class InformationActivity : AppCompatActivity() {
     private lateinit var tabLayout:TabLayout;
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private val imageResources = listOf(
+        R.drawable.cancha1,
+        R.drawable.cancha2,
+        R.drawable.cancha3,
+        R.drawable.cancha4
+    )
+
+    private val handler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_informacion)
 
-        val imageResources = listOf(
-            R.drawable.cancha1,
-            R.drawable.cancha2
-        )
-
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val imagePagerAdapter = ImagePagerAdapter(this, imageResources)
         viewPager.adapter = imagePagerAdapter
+
+        // Configura el cambio automático de imágenes cada 3 segundos
+        val handler = android.os.Handler()
+        val updateRunnable = Runnable {
+            val currentItem = viewPager.currentItem
+            val nextItem = (currentItem + 1) % imageResources.size
+            viewPager.setCurrentItem(nextItem, true)
+        }
+
+        handler.postDelayed(updateRunnable, 3000) // Cambia la imagen cada 3 segundos
+
+        // Agrega un callback para detener la actualización cuando la actividad está en segundo plano
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    handler.postDelayed(updateRunnable, 3000)
+                } else {
+                    handler.removeCallbacks(updateRunnable)
+                }
+            }
+        })
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == androidx.appcompat.app.AppCompatActivity.RESULT_OK) {
@@ -49,6 +74,10 @@ class InformationActivity : AppCompatActivity() {
             // Establecer la pestaña seleccionada en el TabLayout
             tabLayout.getTabAt(selectedTabPosition)?.select()
         }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 
     fun openGoogleMaps(view: View) {

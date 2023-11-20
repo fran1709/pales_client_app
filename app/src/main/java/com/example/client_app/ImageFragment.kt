@@ -35,7 +35,7 @@ class ImageFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_carrusel, container, false)
         val imageView = rootView.findViewById<ImageView>(R.id.imageView)
 
-        imageView.setImageResource(R.drawable.cancha1)
+        imageView.setImageResource(imageResourceId)
 
         return rootView
     }
