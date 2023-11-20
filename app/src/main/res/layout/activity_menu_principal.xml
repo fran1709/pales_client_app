@@ -89,6 +89,7 @@
 
             <!-- Opción 2 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/promociones"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="8dp">
@@ -120,6 +121,7 @@
 
             <!-- Opción 3 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/eventos"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="8dp">

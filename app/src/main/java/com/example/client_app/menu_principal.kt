@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import com.google.android.material.tabs.TabLayout
 
 private lateinit var startForResult: ActivityResultLauncher<Intent>
@@ -32,6 +33,16 @@ class menu_principal : AppCompatActivity() {
         // Cambiar el título del Toolbar
         val titleTextView: TextView = findViewById(R.id.textView)
         titleTextView.text = "Pale's Cachas Sintéticas"
+
+        val promocionesCardView: CardView = findViewById(R.id.promociones)
+        promocionesCardView.setOnClickListener {
+            activityEventos()
+        }
+
+        val eventosCardView: CardView = findViewById(R.id.eventos)
+        eventosCardView.setOnClickListener {
+            activityEventos()
+        }
     }
 
     fun toolbar_navigator(){
@@ -132,6 +143,13 @@ class menu_principal : AppCompatActivity() {
     fun call_activity_aprobar_resenias(View:View){
         // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, AprobarResenia::class.java)
+    }
+    fun activityPromociones(){
+        val intent = Intent(this, ListarPromociones::class.java)
+        startActivity(intent)
+    }
+    fun activityEventos(){
+        val intent = Intent(this, ListarEventos::class.java)
         startActivity(intent)
     }
 }
