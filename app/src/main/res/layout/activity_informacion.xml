@@ -8,24 +8,12 @@
     android:background="@drawable/login_register_bg"
     android:orientation="vertical">
 
-    <!-- Barra de navegación -->
-
-    <!-- Logo
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="243dp"
-        android:layout_height="130dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/pales_logo" />-->
-
-    <!-- Título "Cancha Sintética Pale's" -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="60dp"
         android:shadowColor="@color/principal"
         android:shadowDx="10"
         android:shadowDy="10"
@@ -33,18 +21,17 @@
         android:text="Cancha Pale's"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="50sp"
+        android:textSize="45sp"
         android:textStyle="bold" />
 
     <!-- Carrusel de fotografías (ViewPager2) -->
-
-    <!-- Título "Horarios" -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="80dp" />
+        android:layout_marginTop="50dp" />
 
+    <!-- Título "Horarios" -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -106,7 +93,7 @@
         android:layout_width="60dp"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         android:clickable="true"
         android:contentDescription="Ubicación"
         android:onClick="openGoogleMaps"
