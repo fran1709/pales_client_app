@@ -44,7 +44,6 @@ class ReseniasActivity : AppCompatActivity() {
     private var isLoading = true
     private lateinit var userID: String
     private var userNombre = ""
-    private var documentID = ""
     private val commentClickListener = object : OnCommentClickListener {
         override fun onCommentClick(resenia: Resenia) {
             // Lógica para editar el comentario al hacer clic en él
@@ -52,15 +51,12 @@ class ReseniasActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resenias)
 
         // Obtener el userID o asignarlo según corresponda
         userID = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-
 
         initializeUI()
 
@@ -85,6 +81,7 @@ class ReseniasActivity : AppCompatActivity() {
 
         // Agrega el SnapshotListener para escuchar cambios en la colección "resena"
         commentsListener = db.collection("resena")
+            .whereEqualTo("estado", true)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
@@ -282,7 +279,7 @@ class ReseniasActivity : AppCompatActivity() {
             val comentario = input.text.toString()
             if (comentario.isNotEmpty()) {
                 // TODO: ACA SE PONDRIA ESTADO EN FALSO PARA EL QUE ADMINISTRADOR LE DE ACEPTAR O RECHAZAR.
-                createComentario(comentario, true)
+                createComentario(comentario, false)
             }
             dialog.dismiss()
         }
@@ -399,6 +396,7 @@ class ReseniasActivity : AppCompatActivity() {
      */
     private fun loadResenias() {
         db.collection("resena")
+            .whereEqualTo("estado", true) // Obtener solo comentarios con estado=true
             .get()
             .addOnSuccessListener { result ->
                 val resenias = result.documents.map { document ->
