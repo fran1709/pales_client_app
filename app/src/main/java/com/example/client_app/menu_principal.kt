@@ -1,8 +1,11 @@
 package com.example.client_app
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,25 +35,37 @@ class menu_principal : AppCompatActivity() {
     }
 
     fun toolbar_navigator(){
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> {
-                        val intent = Intent(this@menu_principal, InformationActivity::class.java)
-                        startActivity(intent)
+                        if (!isCurrentActivity(InformationActivity::class.java)) {
+                            val intent = Intent(this@menu_principal, InformationActivity::class.java)
+                            intent.putExtra("selectedTab", 0) // Agregar posición como extra
+                            call_info_lugar_activity()
+                        }
                     }
                     1 -> {
-                        val intent = Intent(this@menu_principal, ReseniasActivity::class.java)
-                        startActivity(intent)
+                        if (!isCurrentActivity(ReseniasActivity::class.java)) {
+                            val intent = Intent(this@menu_principal, ReseniasActivity::class.java)
+                            intent.putExtra("selectedTab", 1) // Agregar posición como extra
+                            callActivityResenias()
+                        }
                     }
                     2 -> {
-                        val intent = Intent(this@menu_principal, ListarUsuarios::class.java)
-                        startForResult.launch(intent)
+                        if (!isCurrentActivity(ListarUsuarios::class.java)) {
+                            val intent = Intent(this@menu_principal, ListarUsuarios::class.java)
+                            intent.putExtra("selectedTab", 2) // Agregar posición como extra
+                            activitylistarusuarios()
+                        }
                     }
                     3 -> {
-                        val intent = Intent(this@menu_principal, MiPerfil::class.java)
-                        //startActivity(intent)
-                        startForResult.launch(intent)
+                        if (!isCurrentActivity(MiPerfil::class.java)) {
+                            val intent = Intent(this@menu_principal, MiPerfil::class.java)
+                            intent.putExtra("selectedTab", 2) // Agregar posición como extra
+                            activityperfil()
+                        }
                     }
                 }
             }
@@ -64,22 +79,38 @@ class menu_principal : AppCompatActivity() {
                 // Si la pestaña está seleccionada, también realiza la acción correspondiente
                 when (tab?.position) {
                     0 -> {
-                        call_info_lugar_activity()
+                        if (!isCurrentActivity(InformationActivity::class.java)) {
+                            call_info_lugar_activity()
+                        }
                     }
                     1 -> {
-                        callActivityResenias()
+                        if (!isCurrentActivity(ReseniasActivity::class.java)) {
+                            callActivityResenias()
+                        }
                     }
                     2 -> {
-                        activitylistarusuarios()
+                        if (!isCurrentActivity(ListarUsuarios::class.java)) {
+                            activitylistarusuarios()
+                        }
                     }
                     3 -> {
-                        activityperfil()
+                        if (!isCurrentActivity(MiPerfil::class.java)) {
+                            activityperfil()
+                        }
                     }
                 }
             }
         })
     }
-
+    fun isCurrentActivity(activityClass: Class<*>): Boolean {
+        val manager = (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val runningTaskInfoList = manager.getRunningTasks(1)
+        if (runningTaskInfoList.isNotEmpty()) {
+            val topActivity = runningTaskInfoList[0].topActivity
+            return topActivity?.className == activityClass.name
+        }
+        return false
+    }
     fun callActivityResenias(){
         val intent = Intent(this, ReseniasActivity::class.java)
         startActivity(intent)
@@ -98,5 +129,9 @@ class menu_principal : AppCompatActivity() {
         startActivity(intent)
     }
 
-    
+    fun call_activity_aprobar_resenias(View:View){
+        // Crear un Intent para iniciar la Activity2
+        val intent = Intent(this, AprobarResenia::class.java)
+        startActivity(intent)
+    }
 }

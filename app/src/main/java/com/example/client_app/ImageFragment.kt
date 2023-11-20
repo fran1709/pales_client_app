@@ -6,7 +6,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.client_app.R
 
-
 class ImageFragment : Fragment() {
 
     private var imageResourceId: Int = 0
@@ -35,7 +34,7 @@ class ImageFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_carrusel, container, false)
         val imageView = rootView.findViewById<ImageView>(R.id.imageView)
 
-        imageView.setImageResource(R.drawable.cancha1)
+        imageView.setImageResource(imageResourceId)
 
         return rootView
     }
