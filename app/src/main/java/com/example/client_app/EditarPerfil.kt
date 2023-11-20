@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.text.Editable
+import android.util.Log
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
@@ -63,13 +64,19 @@ class EditarPerfil : AppCompatActivity() {
                         fechaCovertida = playerBirthday // Asegúrate de que fechaCovertida sea del mismo tipo que necesitas
                     }
                     val playerPhone = document.getString("telefono")
-                    val playerPositions = document.get("posiciones") as List<*>?
 
-                    porteroCheck1.isChecked = playerPositions?.contains("Portero") == true
-                    defensaCheck1.isChecked = playerPositions?.contains("Defensa") == true
-                    medioCheck1.isChecked = playerPositions?.contains("Mediocampista") == true
-                    delanteroCheck1.isChecked = playerPositions?.contains("Delantero") == true
-
+                    val playerPositions = document.get("posiciones") as List<String>?
+                    playerPositions?.let {
+                        for (position in it) {
+                            val trimmedPosition = position.trim()
+                            when (trimmedPosition) {
+                                "Portero" -> porteroCheck1.isChecked = true
+                                "Defensa" -> defensaCheck1.isChecked = true
+                                "Mediocampista" -> medioCheck1.isChecked = true
+                                "Delantero" -> delanteroCheck1.isChecked = true
+                            }
+                        }
+                    }
 
                     // Update the TextViews with the retrieved data
                     userName.setText(playerName)
