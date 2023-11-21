@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frame_6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/pantallas3"
+    android:orientation="vertical">
+
+    <!-- Encabezado con botones de navegación -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="67dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@string/backButtonDescription"
+            android:src="@drawable/arrow_back_white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- Título del Evento (Nombre) -->
+    <TextView
+        android:id="@+id/tvEventoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="top"
+        android:text="Nombre del Evento"
+        android:textAppearance="@style/profileName" />
+
+    <!-- Detalles del evento -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical">
+
+        <!-- Descripción del evento -->
+        <TextView
+            android:id="@+id/descripcion"
+            style="@style/profileAttributes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Descripción: " />
+
+        <TextView
+            android:id="@+id/descripcionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Descripción del evento"
+            android:textAppearance="@style/profileAttributesText" />
+
+        <!-- Fecha -->
+        <TextView
+            android:id="@+id/fecha_inicio"
+            style="@style/profileAttributes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Fecha: " />
+
+        <TextView
+            android:id="@+id/fechaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Fecha de inicio del evento"
+            android:textAppearance="@style/profileAttributesText" />
+
+        <!-- URL de la imagen del evento -->
+        <TextView
+            android:id="@+id/imagen_url"
+            style="@style/profileAttributes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="URL de la Imagen: " />
+
+        <TextView
+            android:id="@+id/imagen_urlText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="URL de la imagen del evento"
+            android:textAppearance="@style/profileAttributesText" />
+    </LinearLayout>
+</LinearLayout>
