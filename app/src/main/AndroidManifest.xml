@@ -47,6 +47,9 @@
             android:name=".ListarReservas"
             android:exported="false" />
         <activity
+            android:name=".ListarMisReservas"
+            android:exported="false" />
+        <activity
             android:name=".DetalleReserva"
             android:exported="false" />
         <activity

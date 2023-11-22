@@ -79,8 +79,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
         android:text="Recordar mi cuenta" />
 
     <Button
@@ -100,6 +100,7 @@
         android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:background="#172E4B"
         android:backgroundTint="#172E4B"
         android:onClick="callRegister"
