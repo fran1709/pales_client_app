@@ -58,6 +58,11 @@ class ListarReservas : AppCompatActivity() {
             }
         }
 
+        val verMisReservasBoton: ImageButton = findViewById(R.id.misReservas)
+        verMisReservasBoton.setOnClickListener {
+            activityListarMisReservas()
+        }
+
         val searchPromotion: ImageButton = findViewById(R.id.crearReservas)
         searchPromotion.setOnClickListener {
             activityCrearReserva()
@@ -229,6 +234,11 @@ class ListarReservas : AppCompatActivity() {
 
     fun activityCrearReserva() {
         val intent = Intent(this, CrearReserva::class.java)
+        startForResult.launch(intent)
+    }
+
+    fun activityListarMisReservas() {
+        val intent = Intent(this, ListarMisReservas::class.java)
         startForResult.launch(intent)
     }
 }

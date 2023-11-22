@@ -133,7 +133,7 @@ class CrearReserva : AppCompatActivity() {
             reservasCollection
                 .add(nuevaReserva)
                 .addOnSuccessListener { documentReference ->
-                    Toast.makeText(this, "Reserva creada con éxito", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, " Debe cancelar un 25% de la reserva para poder reservarla, esto por sinpe al....", Toast.LENGTH_LONG).show()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Error al crear reserva", Toast.LENGTH_SHORT).show()

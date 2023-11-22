@@ -28,7 +28,7 @@ private val jugadorList = mutableListOf<Jugador>()
 class ListarMisReservas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listar_reservas)
+        setContentView(R.layout.activity_listar_mis_reservas)
         db = FirebaseFirestore.getInstance()
         jugadoresListData {
             reservasListData {
@@ -36,7 +36,6 @@ class ListarMisReservas : AppCompatActivity() {
                 displayReservas(reservaList)
             }
         }
-        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -44,11 +43,7 @@ class ListarMisReservas : AppCompatActivity() {
             }
         }
 
-        val searchPromotion: ImageButton = findViewById(R.id.crearReservas)
-        searchPromotion.setOnClickListener {
-            activityCrearReserva()
-        }
-
+        /*
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.radioButtonIndividual -> {
@@ -61,6 +56,7 @@ class ListarMisReservas : AppCompatActivity() {
                 }
             }
         }
+        */
 
         val backProfile: ImageButton = findViewById(R.id.backButton)
         backProfile.setOnClickListener {
@@ -195,10 +191,5 @@ class ListarMisReservas : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    fun activityCrearReserva() {
-        val intent = Intent(this, CrearReserva::class.java)
-        startForResult.launch(intent)
     }
 }
