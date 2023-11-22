@@ -6,13 +6,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -33,13 +36,17 @@ class MiPerfil : AppCompatActivity() {
         auth = Firebase.auth
 
         val editProfile: ImageButton = findViewById(R.id.editProfile)
-
+        val btnEliminarCuenta: ImageButton = findViewById(R.id.deleteProfile)
         val id = auth.currentUser?.uid
+        val user = auth.currentUser
 
         userData(id)
 
         editProfile.setOnClickListener {
             callActivityEditar(id)
+        }
+        btnEliminarCuenta.setOnClickListener {
+            mostrarDialogoConfirmacion(user)
         }
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -47,7 +54,7 @@ class MiPerfil : AppCompatActivity() {
                 val data: android.content.Intent? = result.data
                 val nombre1 = data?.getStringExtra("nombre")
                 val apodo1 = data?.getStringExtra("apodo")
-                //val posicion1 = data?.getStringExtra("posicion")
+                val posiciones1 = data?.getStringExtra("posicion")?.split(",") ?: emptyList()
                 val age1 = data?.getStringExtra("age")
                 val phone1 = data?.getStringExtra("phone")
 
@@ -55,11 +62,31 @@ class MiPerfil : AppCompatActivity() {
                 val nuevosDatos = mapOf(
                     "nombre" to nombre1,
                     "apodo" to apodo1,
-                    //"posicion" to posicion1,
+                    "posicion" to posiciones1,
                     "fecha_nacimiento" to age1,
                     "telefono" to phone1
                     // Agrega otros campos y sus nuevos valores aquí
                 )
+                db.collection("jugadores")
+                    .whereEqualTo("UID", id)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Update the document with the new data
+                            db.collection("jugadores").document(document.id)
+                                .update("posiciones", posiciones1)
+                                .addOnSuccessListener {
+                                    // Update was successful
+                                    userData(id)
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle the error
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle the error
+                    }
                 db.collection("jugadores")
                     .whereEqualTo("UID", id)
                     .get()
@@ -193,6 +220,73 @@ class MiPerfil : AppCompatActivity() {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+    fun mostrarDialogoConfirmacion(user : FirebaseUser?) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirmar eliminación")
+        builder.setMessage("¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.")
+
+        builder.setPositiveButton("Eliminar") { _, _ ->
+            eliminarCuenta(user)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+    private fun eliminarCuenta(user : FirebaseUser?) {
+        //val user = auth.currentUser
+
+        user?.delete()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    eliminarJugadorDeColeccion(user)
+                    cerrarSesionYVolverAlMainActivity(user)
+                } else {
+                    // Hubo un error al eliminar la cuenta
+                    // Puedes manejar el error según sea necesario
+                }
+            }
+    }
+    private fun cerrarSesionYVolverAlMainActivity(user : FirebaseUser?) {
+        auth.signOut()
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finishAffinity()
+    }
+    private fun eliminarJugadorDeColeccion(user : FirebaseUser?) {
+        //auth = Firebase.auth
+        val userId = user?.uid
+
+        if (userId != null) {
+            db.collection("jugadores")
+                .whereEqualTo("UID", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val jugadorUID = document.getString("UID")
+
+                        if (jugadorUID == userId) {
+                            db.collection("jugadores")
+                                .document(document.id)
+                                .delete()
+                                .addOnSuccessListener {
+                                }
+                                .addOnFailureListener { e ->
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("MiPerfilActivity", "Error al buscar jugador en la colección", e)
+                }
+        }
+
     }
     fun callActivityEditar(id : String?){
         // Crear un Intent para iniciar la Activity

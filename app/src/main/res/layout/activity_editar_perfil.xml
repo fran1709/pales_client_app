@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -180,40 +180,24 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/attributeBackgroundDesc"
-                    android:src="@drawable/profile_data_background2" />
-
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="175dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp">
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/edad"
-                        style="@style/profileAttributes"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/fechaNacimientoLabel"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="Fecha de Nacimiento: " />
+                        android:layout_marginTop="20dp"
+                        android:text="Seleccione una Fecha" />
 
-                    <EditText
-                        android:id="@+id/etAge"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/fechaNacimientoEdit"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:text=""
-                        android:textAppearance="@style/profileAttributesText" />
+                        android:layout_margin="20dp"
+                        android:text="Click aqui" />
 
                 </LinearLayout>
 
@@ -225,42 +209,43 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/attributeBackgroundDesc"
-                    android:src="@drawable/profile_data_background" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="175dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp">
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/posicion"
-                        style="@style/profileAttributes"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="Posición: " />
+                        android:text="Posición" />
 
-                    <EditText
-                        android:id="@+id/etnPosicion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:text=""
-                        android:textAppearance="@style/profileAttributesText" />
+                    <CheckBox
+                        android:id="@+id/porteroCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Portero" />
+
+                    <CheckBox
+                        android:id="@+id/defensaCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Defensa" />
+
+                    <CheckBox
+                        android:id="@+id/medioCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Mediocampista" />
+
+                    <CheckBox
+                        android:id="@+id/delanteroCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Delantero" />
 
                 </LinearLayout>
+
 
             </FrameLayout>
 
@@ -270,4 +255,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

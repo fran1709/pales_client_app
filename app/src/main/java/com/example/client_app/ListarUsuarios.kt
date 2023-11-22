@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -24,9 +27,9 @@ data class Jugador(val id: String?, val nombre: String, val posiciones: List<Str
 
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
-
+private lateinit var recyclerView2: RecyclerView
+private lateinit var tabLayout:TabLayout;
 class ListarUsuarios : AppCompatActivity() {
-    private lateinit var tabLayout: TabLayout;
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +67,8 @@ class ListarUsuarios : AppCompatActivity() {
             // Establecer la pestaña seleccionada en el TabLayout
             tabLayout.getTabAt(selectedTabPosition)?.select()
         }
-
-
+        recyclerView2 = findViewById(R.id.recyclerView2)
+        recyclerView2.layoutManager = LinearLayoutManager(this)
     }
     private fun usersListData(id1 : String?) {
         val jugadoresCollection = db.collection("jugadores")
@@ -84,33 +87,41 @@ class ListarUsuarios : AppCompatActivity() {
                     }
 
                 }
-
                 // Mostrar los datos en el ListView
                 displayJugadores(jugadoresList)
             }
             .addOnFailureListener { exception ->
-                // Handle failures
+                Log.e("ListarUsuarios", "Error al obtener jugadores", exception)
             }
     }
-    private fun displayJugadores(jugadoresList: List<Jugador>) {
-        val listView: ListView = findViewById(R.id.lv1)
-        val adapter = JugadorAdapter(this, jugadoresList)
-        listView.adapter = adapter
-    }
-    class JugadorAdapter(context: Context, private val jugadores: List<Jugador>) : ArrayAdapter<Jugador>(context, 0, jugadores) {
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var itemView = convertView
-            if (itemView == null) {
-                itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
-            }
+    class JugadorAdapter(private val context: Context, private val jugadores: List<Jugador>) :
+        RecyclerView.Adapter<JugadorAdapter.ViewHolder>() {
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val tvJugadorInfo: TextView = itemView.findViewById(R.id.tvJugadorInfo)
+            val tvPositionInfo: TextView = itemView.findViewById(R.id.tvPositionInfo)
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val itemView =
+                LayoutInflater.from(context).inflate(R.layout.item_jugador, parent, false)
+            return ViewHolder(itemView)
+        }
+        override fun getItemCount(): Int {
+            return jugadores.size
+
+        }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
             val jugador = jugadores[position]
-            itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Nombre: ${jugador.nombre}  Posición: ${jugador.posiciones.joinToString(", ")}"
 
-            itemView?.setOnClickListener {
+            holder.tvJugadorInfo.text = jugador.nombre
+            holder.tvPositionInfo.text = "Posición: ${jugador.posiciones.joinToString(", ")}"
+
+
+            holder.itemView.setOnClickListener {
                 db.collection("jugadores")
-                    .whereEqualTo("nombre", jugador.nombre) //VERIFICAR POR ID NO POR NOMBRE
+                    .whereEqualTo("UID", jugador.id) //VERIFICAR POR ID NO POR NOMBRE
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
                         for (document in documentSnapshot) {0
@@ -133,13 +144,13 @@ class ListarUsuarios : AppCompatActivity() {
                             context.startActivity(intent)
                         }
                     }
-
             }
-
-            return itemView!!
         }
     }
-
+    private fun displayJugadores(jugadoresList: List<Jugador>) {
+        val adapter = JugadorAdapter(this, jugadoresList)
+        recyclerView2.adapter = adapter
+    }
     fun activityperfiljugador(view: View){
         val intent = Intent(this, PerfilJugador::class.java)
         startForResult.launch(intent)
@@ -148,6 +159,8 @@ class ListarUsuarios : AppCompatActivity() {
         val intent = Intent(this, BuscarJugador::class.java)
         startForResult.launch(intent)
     }
+
+
 
     fun toolbar_navigator(){
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -244,3 +257,48 @@ class ListarUsuarios : AppCompatActivity() {
         startActivity(intent)
     }
 }
+
+
+
+/*class JugadorAdapter(context: Context, private val jugadores: List<Jugador>) : ArrayAdapter<Jugador>(context, 0, jugadores) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var itemView = convertView
+        if (itemView == null) {
+            itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
+        }
+
+        val jugador = jugadores[position]
+        itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Nombre: ${jugador.nombre}  Posición: ${jugador.posiciones.joinToString(", ")}"
+
+        itemView?.setOnClickListener {
+            db.collection("jugadores")
+                .whereEqualTo("nombre", jugador.nombre) //VERIFICAR POR ID NO POR NOMBRE
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    for (document in documentSnapshot) {0
+                        // Retrieve data from the document
+                        val playerName = document.getString("nombre")
+                        val playerNickname = document.getString("apodo")
+                        val playerPositions = document.get("posiciones") as List<String>?
+                        val playerBirthday = document.getString("fecha_nacimiento")
+                        val playerPhone = document.getString("telefono")
+                        val playerClasificacion = document.getString("clasificacion")
+
+                        // Cuando se hace clic en un elemento, abrir la actividad PerfilJugador
+                        val intent = Intent(context, PerfilJugador::class.java)
+                        intent.putExtra("nombre", playerName)
+                        intent.putExtra("apodo", playerNickname)
+                        intent.putStringArrayListExtra("posiciones", ArrayList(jugador.posiciones))
+                        intent.putExtra("fecha_nacimiento", playerBirthday)
+                        intent.putExtra("telefono", playerPhone)
+                        intent.putExtra("clasificacion", playerClasificacion)
+                        context.startActivity(intent)
+                    }
+                }
+
+        }
+
+        return itemView!!
+    }
+}*/

@@ -89,5 +89,6 @@
     <string name="reservas">Reservas</string>
     <string name="eventos">Eventos</string>
     <string name="p_les_cachas_sint_ticas">Pale´s Cachas Sintéticas</string>
+    <string name="posicion_del_jugador">Posición del Jugador</string>
 
 </resources>

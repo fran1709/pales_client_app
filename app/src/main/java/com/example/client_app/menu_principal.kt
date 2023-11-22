@@ -147,6 +147,7 @@ class menu_principal : AppCompatActivity() {
     fun call_activity_aprobar_resenias(View:View){
         // Crear un Intent para iniciar la Activity2
         val intent = Intent(this, AprobarResenia::class.java)
+        startActivity(intent)
     }
     fun activityReservas(){
         val intent = Intent(this, ListarReservas::class.java)
