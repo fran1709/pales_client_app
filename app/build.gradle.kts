@@ -63,5 +63,6 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-firestore:24.8.1")
+    implementation("com.squareup.picasso:picasso:2.71828")
 
 }

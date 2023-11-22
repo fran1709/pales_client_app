@@ -3,8 +3,10 @@ package com.example.client_app
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -31,7 +33,8 @@ class DetallePromocion : AppCompatActivity() {
         val estadoText: TextView = findViewById(R.id.estadoText)
         val fechaInicioText: TextView = findViewById(R.id.fecha_inicioText)
         val fechaFinalText: TextView = findViewById(R.id.fecha_finalText)
-        val imagenUrlText: TextView = findViewById(R.id.imagen_urlText)
+        val imageView: ImageView = findViewById(R.id.imagenView)
+        Picasso.get().load(imagenUrl).placeholder(R.drawable.cancha1).into(imageView)
         val tvPromotionName: TextView = findViewById(R.id.tvPromotionName)
 
         // Establecer los valores en los TextViews
@@ -42,7 +45,6 @@ class DetallePromocion : AppCompatActivity() {
         //fechaFinalText.text = convertTimestampToString(fechaFinal)
         fechaInicioText.text = fechaInicio
         fechaFinalText.text = fechaFinal
-        imagenUrlText.text = imagenUrl
 
         backButton.setOnClickListener {
             setResult(RESULT_CANCELED)

@@ -53,7 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Descripción: " />
 
         <TextView
@@ -61,7 +60,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Descripción de la promoción"
             android:textAppearance="@style/profileAttributesText" />
 
@@ -72,7 +70,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Estado: " />
 
         <TextView
@@ -80,7 +77,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Estado de la promoción"
             android:textAppearance="@style/profileAttributesText" />
 
@@ -91,7 +87,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Fecha de Inicio: " />
 
         <TextView
@@ -99,7 +94,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Fecha de inicio de la promoción"
             android:textAppearance="@style/profileAttributesText" />
 
@@ -109,7 +103,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Fecha de Finalización: " />
 
         <TextView
@@ -117,27 +110,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="Fecha de finalización de la promoción"
             android:textAppearance="@style/profileAttributesText" />
 
-        <!-- URL de la imagen de la promoción -->
-        <TextView
-            android:id="@+id/imagen_url"
-            style="@style/profileAttributes"
+        <ImageView
+            android:id="@+id/imagenView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="URL de la Imagen: " />
-
-        <TextView
-            android:id="@+id/imagen_urlText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="URL de la imagen de la promoción"
-            android:textAppearance="@style/profileAttributesText" />
+            android:src="@drawable/cancha1" />
     </LinearLayout>
 </LinearLayout>
