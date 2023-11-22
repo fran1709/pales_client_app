@@ -3,46 +3,63 @@ package com.example.client_app
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.ImageButton
-import android.widget.MultiAutoCompleteTextView
+import com.google.firebase.Timestamp
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 data class Horario(
+    val id: String,
     val fecha: String,
+    val horaInicio: String,
+    val horaFin: String,
     val reservado: Boolean
 )
 
 private lateinit var db: FirebaseFirestore
 class CrearReserva : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var autoCompleteHorario: AutoCompleteTextView
     private lateinit var horarios: List<Horario>
-    private lateinit var jugadores: List<JugadorReserva>
     override fun onCreate(savedInstanceState: Bundle?) {
         cargarHorariosFirebase()
-        cargarJugadoresFirebase()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_reserva)
 
+        val spinnerDificultad: Spinner = findViewById(R.id.spinnerDificultad)
         val backButton: ImageButton = findViewById(R.id.backButton)
+        ArrayAdapter.createFromResource(this, R.array.dificultad_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerDificultad.adapter = adapter
+        }
 
         backButton.setOnClickListener {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+
+        val crearReservaButton: Button = findViewById(R.id.crearReservaButton)
+        crearReservaButton.setOnClickListener {
+            crearReserva()
             setResult(RESULT_CANCELED)
             finish()
         }
     }
 
     private fun cargarHorariosFirebase() {
-        val eventosCollection = db.collection("horario")
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val horarioCollection = db.collection("horario")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-        eventosCollection
+        horarioCollection
             .whereEqualTo("reservado", false)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -50,67 +67,38 @@ class CrearReserva : AppCompatActivity() {
                 val fechaActual = Date()
 
                 for (document in querySnapshot) {
-                    val fecha = document.getDate("fecha") ?: Date()
+                    var fecha = document.getDate("fecha") ?: Date()
 
                     // Verificar si la fecha es después de la fecha actual
                     if (fecha.after(fechaActual)) {
+                        val id = document.getString("id") ?: ""
                         val reservado = document.getBoolean("reservado") ?: false
+                        val tanda = document.get("tanda") as? ArrayList<Timestamp>
+                        val formatoHoraMinutos = SimpleDateFormat("HH:mm", Locale.getDefault())
                         val fechaFormateada = dateFormat.format(fecha)
-                        val horario = Horario(fechaFormateada, reservado)
+                        var horaInicioFormateada = "00:00"
+                        var horaFinFormateada = "00:00"
+                        if (tanda != null && tanda.size >= 2) {
+                            val horaInicio = tanda[0].toDate()
+                            val horaFin = tanda[1].toDate()
+                            horaInicioFormateada = formatoHoraMinutos.format(horaInicio)
+                            horaFinFormateada = formatoHoraMinutos.format(horaFin)
+                        }
+                        val infoHorario = "$fechaFormateada \nInicio: $horaInicioFormateada Fin: $horaFinFormateada"
+                        val horario = Horario(id, infoHorario, horaInicioFormateada , horaFinFormateada, reservado)
                         horariosList.add(horario)
                     }
                 }
 
                 horarios = horariosList
-                configurarSpinner()
+                configurarSpinnerHorario()
             }
             .addOnFailureListener { exception ->
                 // Handle failures
             }
     }
 
-    private fun cargarJugadoresFirebase() {
-        val jugadoresCollection = db.collection("jugadores")
-
-        jugadoresCollection
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                val jugadoresList = mutableListOf<JugadorReserva>()
-
-                for (document in querySnapshot) {
-                    val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
-
-                    val apodo = document.getString("apodo") ?: document.getString("nombre") ?: ""
-
-                    val uidJugador = document.id
-                    val aceptado = false
-
-                    val clasificacionOriginal =
-                        posiciones.firstOrNull { it.equals("regular", ignoreCase = true) || it.equals("bueno", ignoreCase = true) || it.equals("malo", ignoreCase = true) } ?: ""
-                    val clasificacionNormalizada = normalizarClasificacion(clasificacionOriginal)
-
-                    val retador = JugadorReserva(aceptado, clasificacionNormalizada, posiciones, apodo, uidJugador)
-                    jugadoresList.add(retador)
-                }
-                jugadores = jugadoresList
-                configurarMultiAutoComplete()
-            }
-            .addOnFailureListener { exception ->
-                // Manejar errores
-            }
-    }
-
-    fun normalizarClasificacion(clasificacionActual: String): String {
-        val clasificacionLower = clasificacionActual.toLowerCase()
-        return when {
-            clasificacionLower == "regular" -> "regular"
-            clasificacionLower == "bueno" || clasificacionLower == "good" -> "bueno"
-            clasificacionLower == "malo" || clasificacionLower == "bad" -> "malo"
-            else -> clasificacionLower
-        }
-    }
-
-    private fun configurarSpinner() {
+    private fun configurarSpinnerHorario() {
         val spinnerHorario: Spinner = findViewById(R.id.spinnerHorario)
 
         // Extraer las fechas de la lista de horarios
@@ -121,29 +109,35 @@ class CrearReserva : AppCompatActivity() {
         spinnerHorario.adapter = adapter
     }
 
-    private fun configurarMultiAutoComplete() {
-        val multiAutoCompleteJugadores: MultiAutoCompleteTextView = findViewById(R.id.multiAutoCompleteJugadores)
+    private fun crearReserva() {
+        val user = FirebaseAuth.getInstance().currentUser
 
-        // Extraer los apodos de la lista de jugadores
-        val apodos = jugadores.map { it.apodo }.toTypedArray()
+        if (user != null) {
+            val encargado = user.uid
+            val horarioID = "VbyPLIr78sJ56DGZSPyb"
+            val tipo = "Publica"
+            val clasificacion = "Regular"
 
-        // Configurar el adaptador del MultiAutoCompleteTextView
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, apodos)
-        multiAutoCompleteJugadores.setAdapter(adapter)
+            val retadoresReferences = listOf(db.document("jugadores/VsAShRzpcYOjyIybrFY3"))
 
-        // Configurar el tokenizador para manejar la entrada del usuario
-        multiAutoCompleteJugadores.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+            val reservasCollection = db.collection("reservas")
+            val nuevaReserva = hashMapOf(
+                    "encargado" to encargado,
+                    "horarioID" to horarioID,
+                    "estado" to true,
+                    "tipo" to tipo,
+                    "clasificacion" to clasificacion,
+                    "retadores" to retadoresReferences
+            )
 
-        multiAutoCompleteJugadores.setValidator(object : AutoCompleteTextView.Validator {
-            override fun fixText(invalidText: CharSequence?): CharSequence {
-                return invalidText ?: ""
-            }
-
-            override fun isValid(text: CharSequence?): Boolean {
-                val selectedItems = text?.split(",")?.map { it.trim() } ?: emptyList()
-                return selectedItems.size <= 5
-            }
-        })
+            reservasCollection
+                .add(nuevaReserva)
+                .addOnSuccessListener { documentReference ->
+                    Toast.makeText(this, "Reserva creada con éxito", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error al crear reserva", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
-
 }

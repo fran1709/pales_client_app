@@ -20,34 +20,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 
-data class Reserva(
-    val encargado: String,
-    val estado: Boolean,
-    val equipo: Boolean,
-    val horario: String,
-    val retadores: List<String>,
-    val tipo: String,
-    var apodoEncargado: String,
-    val fecha: String,
-    var documentId: String = ""
-)
-
 private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
 private val reservaList = mutableListOf<Reserva>()
 private val jugadorList = mutableListOf<Jugador>()
 
-class ListarReservas : AppCompatActivity() {
+class ListarMisReservas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listar_reservas)
         db = FirebaseFirestore.getInstance()
-        obtenerBloqueosUsuarioActual {
-            jugadoresListData {
-                reservasListData {
-                    mapJugadoresToReservas()
-                    displayReservas(reservaList)
-                }
+        jugadoresListData {
+            reservasListData {
+                mapJugadoresToReservas()
+                displayReservas(reservaList)
             }
         }
         val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
@@ -83,39 +69,21 @@ class ListarReservas : AppCompatActivity() {
         }
     }
 
-    private fun obtenerBloqueosUsuarioActual(onComplete: (List<String>) -> Unit) {
+    private fun reservasListData(onComplete: () -> Unit) {
+        val reservasCollection = db.collection("reservas")
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user != null) {
-            val uidUsuario = user.uid
+            val userId = user.uid
 
-            db.collection("jugadores")
-                .document(uidUsuario)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val bloqueos = documentSnapshot.get("bloqueos") as? List<String> ?: emptyList()
-                    onComplete(bloqueos)
-                }
-                .addOnFailureListener { exception ->
-                    onComplete(emptyList())
-                }
-        } else {
-            onComplete(emptyList())
-        }
-    }
-
-    private fun reservasListData(onComplete: () -> Unit) {
-        obtenerBloqueosUsuarioActual { bloqueosUsuarioActual ->
-            val reservasCollection = db.collection("reservas")
-            reservasCollection.whereEqualTo("estado", true)
+            reservasCollection
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     reservaList.clear()
 
                     for (document in querySnapshot) {
-                        val reserva = mapFirebaseDocumentToReserva(document)
-                        if (reserva.tipo != "privada" && !reserva.retadores.any { it in bloqueosUsuarioActual }
-                            && reserva.encargado !in bloqueosUsuarioActual) {
+                        val reserva = mapFirebaseDocumentToReservaMisReservas(document)
+                        if (reserva.encargado == userId || userId in reserva.retadores) {
                             reserva.documentId = document.id
                             reservaList.add(reserva)
                         }
@@ -123,7 +91,9 @@ class ListarReservas : AppCompatActivity() {
 
                     onComplete()
                 }
-                .addOnFailureListener { exception -> onComplete() }
+                .addOnFailureListener { exception ->
+                    onComplete()
+                }
         }
     }
 
@@ -143,10 +113,10 @@ class ListarReservas : AppCompatActivity() {
     }
 
     // Función para convertir un documento de Firebase a un objeto Reserva
-    fun mapFirebaseDocumentToReserva(document: DocumentSnapshot): Reserva {
+    fun mapFirebaseDocumentToReservaMisReservas(document: DocumentSnapshot): Reserva {
         val encargadoUID = document.getString("encargado") ?: ""
-        val estado = document.getBoolean("estado") ?: false
-        val equipo = document.getBoolean("equipo") ?: false
+        val estado = false
+        val equipo = false
         val horario = document.getString("horario") ?: ""
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val fecha = document.getDate("fecha") ?: Date()
