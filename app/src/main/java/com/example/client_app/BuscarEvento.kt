@@ -76,19 +76,23 @@ class BuscarEvento : AppCompatActivity() {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
+                    val id = document.id
                     val nombre = document.getString("nombre") ?: ""
                     val descripcion = document.getString("descripcion") ?: ""
                     val estado = document.getBoolean("estado") ?: false
                     val fecha = document.getDate("fecha") ?: Date()
                     val imagenUrl = document.getString("imagen_url") ?: ""
                     val fechaFormateada = dateFormat.format(fecha)
+                    val visto = document.getBoolean("visto") ?: false
 
                     val evento = Evento(
+                        id = id,
                         descripcion = descripcion,
                         estado = estado,
                         fecha = fechaFormateada,
                         imagen_url = imagenUrl,
-                        nombre = nombre
+                        nombre = nombre,
+                        visto = visto
                     )
                     eventosList.add(evento)
                 }
@@ -119,11 +123,13 @@ class BuscarEvento : AppCompatActivity() {
 
             itemView?.setOnClickListener {
                 val intent = Intent(context, DetalleEvento::class.java)
+                intent.putExtra("id", evento.id)
                 intent.putExtra("nombre", evento.nombre)
                 intent.putExtra("descripcion", evento.descripcion)
                 intent.putExtra("estado", evento.estado)
                 intent.putExtra("fecha", evento.fecha)
                 intent.putExtra("imagen_url", evento.imagen_url)
+                intent.putExtra("visto", evento.visto)
                 context.startActivity(intent)
             }
             return itemView!!
