@@ -3,6 +3,7 @@ package com.example.client_app
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,24 +22,17 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class JugadorReserva(
-    val uidJugador: String,
-    val apodo: String,
-    val bloqueos: List<String>,
-    val clasificacion: List<String>,
-    val posiciones: List<String>
-)
-
 private val retadoresList = mutableListOf<JugadorReserva>()
 
-class DetalleReserva : AppCompatActivity() {
+class DetalleMiReserva : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var horarios: List<Horario>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detalle_reserva)
+        setContentView(R.layout.activity_detalle_mi_reserva)
 
         db = FirebaseFirestore.getInstance()
+        val user = FirebaseAuth.getInstance().currentUser
 
         val documentId = intent.getStringExtra("documentId")
         val horario = intent.getStringExtra("horario")
@@ -53,15 +47,23 @@ class DetalleReserva : AppCompatActivity() {
 
         val retadoresLabel: TextView = findViewById(R.id.retadores)
         val retadoresListView: ListView = findViewById(R.id.lv1)
-        val crearReservaButton: Button = findViewById(R.id.UnirmeReservaButton)
+
+        val cancelarReservaButton: Button = findViewById(R.id.CancelarReservaButton)
+        val salirmeReservaButton: Button = findViewById(R.id.SalirmeReservaButton)
+
+        if (user != null) {
+            if (encargado == user.uid) {
+                salirmeReservaButton.visibility = View.GONE
+            }
+
+            if (retadores.contains(user.uid)) {
+                cancelarReservaButton.visibility = View.GONE
+            }
+        }
 
         if (equipo) {
             retadoresLabel.visibility = View.GONE
             retadoresListView.visibility = View.GONE
-        }
-
-        if (tipo.equals("Privada", ignoreCase = true) || tipo.equals("privada", ignoreCase = true) || !estado) {
-            crearReservaButton.visibility = View.GONE
         }
 
         val titulo: TextView = findViewById(R.id.tituloReserva)
@@ -95,60 +97,110 @@ class DetalleReserva : AppCompatActivity() {
             finish()
         }
 
-        crearReservaButton.setOnClickListener {
+        salirmeReservaButton.setOnClickListener {
             if (documentId != null) {
-                unirseReserva(documentId)
+                retirarseReserva(documentId)
+            }
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+
+        cancelarReservaButton.setOnClickListener {
+            if (documentId != null) {
+                cancelarReserva(documentId)
             }
             setResult(RESULT_CANCELED)
             finish()
         }
     }
 
-    private fun unirseReserva(documentId: String) {
+    private fun retirarseReserva(documentId: String) {
         val user = FirebaseAuth.getInstance().currentUser
-
         if (user != null) {
-            val encargado = user.uid
+            val userId = user.uid
 
             val reservasCollection = db.collection("reservas")
 
             reservasCollection.document(documentId)
-                .update("retadores", FieldValue.arrayUnion(encargado))
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Te has unido a la reserva con éxito", Toast.LENGTH_SHORT).show()
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val tipo = documentSnapshot.getString("tipo")
+                    val equipo = documentSnapshot.getBoolean("equipo")
+                    val retadores = documentSnapshot.get("retadores") as? List<String>
 
-                    reservasCollection.document(documentId).get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            val retadores = documentSnapshot.get("retadores") as? List<String>
-                            val equipo = documentSnapshot.get("equipo") as? Boolean
-                            if (equipo != null && equipo) {
-                                reservasCollection.document(documentId)
-                                    .update("tipo", "Privada", "equipo", true)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "Equipo reservó con éxito", Toast.LENGTH_SHORT).show()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Toast.makeText(this, "Error al cambiar el tipo de reserva", Toast.LENGTH_SHORT).show()
-                                    }
+                    if (tipo == "Privada" && equipo == true && retadores?.size == 1 && retadores.contains(userId)) {
+                        reservasCollection.document(documentId)
+                            .update(
+                                "tipo", "Publica",
+                                "equipo", false,
+                                "retadores", FieldValue.arrayRemove(userId)
+                            )
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Has retirado a tu equipo de la reserva con éxito", Toast.LENGTH_SHORT).show()
                             }
-                            if (retadores != null && retadores.size == 6) {
-                                reservasCollection.document(documentId)
-                                    .update("tipo", "Privada", "equipo", true)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "La reserva ahora es privada", Toast.LENGTH_SHORT).show()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Toast.makeText(this, "Error al cambiar el tipo de reserva", Toast.LENGTH_SHORT).show()
-                                    }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error al retirarse de la reserva", Toast.LENGTH_SHORT).show()
                             }
-                        }
+                    } else if (tipo == "Privada" && equipo == true && retadores?.size == 6 && retadores.contains(userId)) {
+                        reservasCollection.document(documentId)
+                            .update(
+                                "tipo", "Publica",
+                                "equipo", false,
+                                "retadores", FieldValue.arrayRemove(userId)
+                            )
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Te has retirado de la reserva con éxito", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error al retirarse de la reserva", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        reservasCollection.document(documentId)
+                            .update("retadores", FieldValue.arrayRemove(userId))
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Te has retirado de la reserva con éxito", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error al retirarse de la reserva", Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error al unirse a la reserva", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error al obtener información de la reserva", Toast.LENGTH_SHORT).show()
                 }
         }
     }
 
+    private fun cancelarReserva(documentId: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val userId = user.uid
+
+            val reservasCollection = db.collection("reservas")
+
+            reservasCollection.document(documentId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val encargado = documentSnapshot.getString("encargado")
+
+                    if (encargado != null && userId == encargado) {
+                        reservasCollection.document(documentId)
+                            .delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "La reserva ha sido cancelada con éxito", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error al cancelar la reserva", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "No tienes permisos para cancelar esta reserva", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error al obtener información de la reserva", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
     private fun jugadoresListData(retadores: List<String>, onComplete: () -> Unit) {
         val reservasCollection = db.collection("jugadores")
         reservasCollection.get()

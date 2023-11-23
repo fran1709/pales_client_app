@@ -201,11 +201,16 @@ class ListarReservas : AppCompatActivity() {
 
             val reserva = reservas[position]
             itemView?.findViewById<TextView>(android.R.id.text1)?.apply {
-                text = "Reto "
-                if (reserva.equipo) {
-                    append("Grupal")
+                text = " "
+                if (reserva.tipo == "Publica") {
+                    append("Reto")
                 } else {
-                    append("Individual")
+                    append("Reserva")
+                }
+                if (reserva.equipo) {
+                    append(" Grupal")
+                } else {
+                    append(" Individual")
                 }
                 append("\n      Reserva de ${reserva.apodoEncargado}")
                 append("\n      Fecha del reto: ${reserva.fecha}")

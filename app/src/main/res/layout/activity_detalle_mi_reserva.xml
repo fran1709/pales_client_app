@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/pantallas3"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="67dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@string/backButtonDescription"
+            android:src="@drawable/arrow_back_white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tituloReserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="top"
+        android:text="Reserva de Apodo"
+        android:textAppearance="@style/profileName" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/profileAttributes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Fecha de reserva: "
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/fecha"
+                style="@style/profileAttributes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="DD/MM/YYYY"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:gravity="center">
+
+                <TextView
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hora Inicio: "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/horaInicio"
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="horaInicio"
+                    android:textSize="14sp"
+                    android:layout_marginStart="45dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:gravity="center">
+
+                <TextView
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Hora Fin: "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/horaFin"
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="horaFin"
+                    android:textSize="14sp"
+                    android:layout_marginStart="50dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:gravity="center">
+
+                <TextView
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Privacidad:"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/privacidad"
+                    style="@style/profileAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Publica"
+                    android:textSize="14sp"
+                    android:layout_marginStart="50dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/retadores"
+                style="@style/profileAttributes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Retadores"
+                android:layout_marginTop="20dp"
+                android:textSize="25sp"
+                android:layout_marginStart="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/lv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/listview_background"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="25dp"/>
+
+                <Button
+                    android:id="@+id/SalirmeReservaButton"
+                    android:layout_width="350dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="25dp"
+                    android:background="@color/principal2"
+                    android:text="Salirme de la Reserva"
+                    android:textColor="#FFFFFF"
+                    android:textColorLink="@color/principal2" />
+                <Button
+                    android:id="@+id/CancelarReservaButton"
+                    android:layout_width="350dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="25dp"
+                    android:background="@color/principal2"
+                    android:text="Cancelar el reto"
+                    android:textColor="#FFFFFF"
+                    android:textColorLink="@color/principal2" />
+            </LinearLayout>
+        </LinearLayout>
+</LinearLayout>
