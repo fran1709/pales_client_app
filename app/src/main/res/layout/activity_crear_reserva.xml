@@ -178,7 +178,7 @@
                 android:layout_width="350dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="50dp"
                 android:background="@color/principal2"
                 android:text="Crear Reserva"
                 android:textColor="#FFFFFF"

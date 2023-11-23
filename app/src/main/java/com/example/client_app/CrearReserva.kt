@@ -1,9 +1,11 @@
 package com.example.client_app
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageButton
 import com.google.firebase.Timestamp
 import android.widget.Spinner
@@ -27,14 +29,25 @@ private lateinit var db: FirebaseFirestore
 class CrearReserva : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var horarios: List<Horario>
+    private var equipo: Boolean = false
+    private var tipo: String = "Publica"
+    private var horarioSeleccionadoID: String = ""
+    private var dificultadSeleccionada: String = ""
+    private var fecha: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         cargarHorariosFirebase()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_reserva)
 
-        val spinnerDificultad: Spinner = findViewById(R.id.spinnerDificultad)
+        val individualCheck: CheckBox = findViewById(R.id.individualCheck)
+        val grupoCheck: CheckBox = findViewById(R.id.grupoCheck)
+        val privadaCheck: CheckBox = findViewById(R.id.privadaCheck)
+        val publicaCheck: CheckBox = findViewById(R.id.publicaCheck)
         val backButton: ImageButton = findViewById(R.id.backButton)
+        val spinnerDificultad: Spinner = findViewById(R.id.spinnerDificultad)
+        val spinnerHorario: Spinner = findViewById(R.id.spinnerHorario)
         ArrayAdapter.createFromResource(this, R.array.dificultad_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
@@ -47,11 +60,54 @@ class CrearReserva : AppCompatActivity() {
             finish()
         }
 
+        individualCheck.setOnCheckedChangeListener { _, isChecked ->
+            equipo = !isChecked
+        }
+
+        grupoCheck.setOnCheckedChangeListener { _, isChecked ->
+            equipo = isChecked
+        }
+
+        privadaCheck.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                tipo = "Privada"
+            }
+        }
+
+        publicaCheck.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                tipo = "Publica"
+            }
+        }
+
+
+        spinnerHorario.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                val horarioSeleccionado = horarios[position]
+
+                horarioSeleccionadoID = horarioSeleccionado.id
+                fecha = horarioSeleccionado.fecha
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // Manejar el caso en que no se selecciona nada
+            }
+        }
+
+        spinnerDificultad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                // Obtener la dificultad seleccionada
+                dificultadSeleccionada = parentView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // Manejar el caso en que no se selecciona nada
+            }
+        }
+
         val crearReservaButton: Button = findViewById(R.id.crearReservaButton)
         crearReservaButton.setOnClickListener {
             crearReserva()
-            setResult(RESULT_CANCELED)
-            finish()
         }
     }
 
@@ -114,30 +170,50 @@ class CrearReserva : AppCompatActivity() {
 
         if (user != null) {
             val encargado = user.uid
-            val horarioID = "VbyPLIr78sJ56DGZSPyb"
-            val tipo = "Publica"
-            val clasificacion = "Regular"
 
-            val retadoresReferences = listOf(db.document("jugadores/VsAShRzpcYOjyIybrFY3"))
+            if (horarioSeleccionadoID.isBlank()) {
+                Toast.makeText(this, "Por favor, seleccione un horario", Toast.LENGTH_SHORT).show()
+                return
+            }
 
+            if (dificultadSeleccionada.isBlank()) {
+                Toast.makeText(this, "Por favor, seleccione una dificultad", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val jugadores: List<String> = emptyList()
             val reservasCollection = db.collection("reservas")
             val nuevaReserva = hashMapOf(
-                    "encargado" to encargado,
-                    "horarioID" to horarioID,
-                    "estado" to true,
-                    "tipo" to tipo,
-                    "clasificacion" to clasificacion,
-                    "retadores" to retadoresReferences
+                "encargado" to encargado,
+                "horario" to horarioSeleccionadoID,
+                "fecha" to fecha,
+                "estado" to true,
+                "tipo" to tipo,
+                "equipo" to equipo,
+                "clasificacion" to dificultadSeleccionada,
+                "jugadores" to jugadores,
+                "retadores" to jugadores,
+                "portero" to false
             )
 
             reservasCollection
                 .add(nuevaReserva)
                 .addOnSuccessListener { documentReference ->
-                    Toast.makeText(this, " Debe cancelar un 25% de la reserva para poder reservarla, esto por sinpe al....", Toast.LENGTH_LONG).show()
+                    val horarioCollection = db.collection("horario")
+                    horarioCollection.document(horarioSeleccionadoID)
+                        .update("reservado", true)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Reserva creada con éxito", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Error al actualizar el horario", Toast.LENGTH_SHORT).show()
+                        }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Error al crear reserva", Toast.LENGTH_SHORT).show()
                 }
+            setResult(RESULT_CANCELED)
+            finish()
         }
     }
 }
