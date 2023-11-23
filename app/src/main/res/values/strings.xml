@@ -90,5 +90,14 @@
     <string name="eventos">Eventos</string>
     <string name="p_les_cachas_sint_ticas">Pale´s Cachas Sintéticas</string>
     <string name="posicion_del_jugador">Posición del Jugador</string>
+    <string name="tel_8409_2161_8839_9729">Tel: 8409-2161 / 8839-9729</string>
+    <string name="ubicaci_n_en_maps">Ubicación en Maps</string>
+    <string name="_5_00_am_10_00_pm">5:00 AM - 10:00 PM</string>
+    <string name="tel_fonos">Teléfonos</string>
+    <string name="lunes_a_domingo">Lunes a Domingo</string>
+    <string name="horarios">Horarios</string>
+    <string name="cancha_pale_s">Cancha Pale\'s</string>
+    <string name="ubicaci_n">Ubicación</string>
+    <string name="editar_comentario">Editar Comentario</string>
 
 </resources>

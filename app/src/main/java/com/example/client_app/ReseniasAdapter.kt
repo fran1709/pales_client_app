@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +16,14 @@ interface OnCommentClickListener {
 class ReseniasAdapter(
     private var reseniasList: List<Resenia>,
     private val clickListener: OnCommentClickListener,
-    private val userID: String // Agregar el ID del usuario
+    private val userID: String, // Agregar el ID del usuario
+    private val onEditClick: (Resenia) -> Unit // Agregar esta función de devolución de llamada
 ) : RecyclerView.Adapter<ReseniasAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val jugadorTextView: TextView = itemView.findViewById(R.id.jugadorTextView)
         val comentarioTextView: TextView = itemView.findViewById(R.id.comentarioTextView)
+        val editIcon: ImageView = itemView.findViewById(R.id.editIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,11 +42,17 @@ class ReseniasAdapter(
             holder.itemView.setOnClickListener {
                 clickListener.onCommentClick(resenia)
             }
+            // Muestra el icono de edición y configura su clic
+            holder.editIcon.visibility = View.VISIBLE
+            holder.editIcon.setOnClickListener {
+                onEditClick(resenia)
+            }
         } else {
-            // Si los IDs no coinciden, desactiva el click listener
+            // Si los IDs no coinciden, desactiva el click listener y oculta el icono de edición
             holder.itemView.setOnClickListener {
                 Toast.makeText(holder.itemView.context, "No puedes editar este comentario", Toast.LENGTH_SHORT).show()
             }
+            holder.editIcon.visibility = View.GONE
         }
     }
 
