@@ -131,6 +131,20 @@
             android:textColor="#172E4B"
             android:textSize="18sp" />
 
+            <ImageView
+                android:id="@+id/whatsAppIcon"
+                android:layout_width="70dp"
+                android:layout_height="58dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:contentDescription="@string/ubicaci_n"
+                android:paddingBottom="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/whatsapp256px"
+                android:focusable="true"
+                />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
