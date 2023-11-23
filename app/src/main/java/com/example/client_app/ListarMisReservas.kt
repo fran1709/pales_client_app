@@ -112,7 +112,7 @@ class ListarMisReservas : AppCompatActivity() {
     fun mapFirebaseDocumentToReservaMisReservas(document: DocumentSnapshot): Reserva {
         val encargadoUID = document.getString("encargado") ?: ""
         val estado = false
-        val equipo = false
+        val equipo = document.getBoolean("equipo") ?: false
         val horario = document.getString("horario") ?: ""
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val fecha = document.getDate("fecha") ?: Date()
@@ -162,17 +162,22 @@ class ListarMisReservas : AppCompatActivity() {
 
             val reserva = reservas[position]
             itemView?.findViewById<TextView>(android.R.id.text1)?.apply {
-                text = "Reto "
-                if (reserva.equipo) {
-                    append("Grupal")
+                text = " "
+                if (reserva.tipo == "Publica") {
+                    append("Reto")
                 } else {
-                    append("Individual")
+                    append("Reserva")
+                }
+                if (reserva.equipo) {
+                    append(" Grupal")
+                } else {
+                    append(" Individual")
                 }
                 append("\n      Reserva de ${reserva.apodoEncargado}")
                 append("\n      Fecha del reto: ${reserva.fecha}")
             }
             itemView?.setOnClickListener {
-                val intent = Intent(context, DetalleReserva::class.java)
+                val intent = Intent(context, DetalleMiReserva::class.java)
                 intent.putExtra("encargado", reserva.encargado)
                 intent.putExtra("estado", reserva.estado)
                 intent.putExtra("equipo", reserva.equipo)
