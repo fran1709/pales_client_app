@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.ImageButton
 import com.google.firebase.Timestamp
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -47,12 +48,20 @@ class CrearReserva : AppCompatActivity() {
         val publicaCheck: CheckBox = findViewById(R.id.publicaCheck)
         val backButton: ImageButton = findViewById(R.id.backButton)
         val spinnerDificultad: Spinner = findViewById(R.id.spinnerDificultad)
-        val spinnerHorario: Spinner = findViewById(R.id.spinnerHorario)
-        ArrayAdapter.createFromResource(this, R.array.dificultad_array,
-            android.R.layout.simple_spinner_item
+        ArrayAdapter.createFromResource(this, R.array.dificultad_array, android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerDificultad.adapter = adapter
+            spinnerDificultad.apply {
+                this.adapter = adapter
+
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
+                        dificultadSeleccionada = parentView.getItemAtPosition(position).toString()
+                    }
+
+                    override fun onNothingSelected(parentView: AdapterView<*>) {}
+                }
+            }
         }
 
         backButton.setOnClickListener {
@@ -80,31 +89,6 @@ class CrearReserva : AppCompatActivity() {
             }
         }
 
-
-        spinnerHorario.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
-                val horarioSeleccionado = horarios[position]
-
-                horarioSeleccionadoID = horarioSeleccionado.id
-                fecha = horarioSeleccionado.fecha
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // Manejar el caso en que no se selecciona nada
-            }
-        }
-
-        spinnerDificultad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
-                // Obtener la dificultad seleccionada
-                dificultadSeleccionada = parentView?.getItemAtPosition(position).toString()
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // Manejar el caso en que no se selecciona nada
-            }
-        }
-
         val crearReservaButton: Button = findViewById(R.id.crearReservaButton)
         crearReservaButton.setOnClickListener {
             crearReserva()
@@ -123,11 +107,11 @@ class CrearReserva : AppCompatActivity() {
                 val fechaActual = Date()
 
                 for (document in querySnapshot) {
+                    val id = document.id
                     var fecha = document.getDate("fecha") ?: Date()
 
                     // Verificar si la fecha es después de la fecha actual
                     if (fecha.after(fechaActual)) {
-                        val id = document.getString("id") ?: ""
                         val reservado = document.getBoolean("reservado") ?: false
                         val tanda = document.get("tanda") as? ArrayList<Timestamp>
                         val formatoHoraMinutos = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -140,8 +124,7 @@ class CrearReserva : AppCompatActivity() {
                             horaInicioFormateada = formatoHoraMinutos.format(horaInicio)
                             horaFinFormateada = formatoHoraMinutos.format(horaFin)
                         }
-                        val infoHorario = "$fechaFormateada \nInicio: $horaInicioFormateada Fin: $horaFinFormateada"
-                        val horario = Horario(id, infoHorario, horaInicioFormateada , horaFinFormateada, reservado)
+                        val horario = Horario(id, fechaFormateada, horaInicioFormateada , horaFinFormateada, reservado)
                         horariosList.add(horario)
                     }
                 }
@@ -156,14 +139,42 @@ class CrearReserva : AppCompatActivity() {
 
     private fun configurarSpinnerHorario() {
         val spinnerHorario: Spinner = findViewById(R.id.spinnerHorario)
+        val adapter = object : ArrayAdapter<Horario>(this, android.R.layout.simple_spinner_dropdown_item, horarios) {
+            override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val horario = getItem(position)
+                view.findViewById<TextView>(android.R.id.text1).text = "${horario?.fecha} Inicio: ${horario?.horaInicio} Fin: ${horario?.horaFin}"
+                return view
+            }
 
-        // Extraer las fechas de la lista de horarios
-        val fechas = horarios.map { it.fecha }.toTypedArray()
+            override fun getDropDownView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val horario = getItem(position)
+                view.findViewById<TextView>(android.R.id.text1).text = "${horario?.fecha} Inicio: ${horario?.horaInicio} Fin: ${horario?.horaFin}"
+                return view
+            }
+        }
 
-        // Configurar el adaptador del Spinner
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, fechas)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerHorario.adapter = adapter
+        configurarListenerSpinner()
     }
+
+    private fun configurarListenerSpinner() {
+        val spinnerHorario: Spinner = findViewById(R.id.spinnerHorario)
+
+        spinnerHorario.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
+                val horarioSeleccionado = horarios[position]
+                horarioSeleccionadoID = horarioSeleccionado.id
+                fecha = horarioSeleccionado.fecha
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+            }
+        }
+    }
+
 
     private fun crearReserva() {
         val user = FirebaseAuth.getInstance().currentUser
@@ -181,12 +192,25 @@ class CrearReserva : AppCompatActivity() {
                 return
             }
 
+            if (tipo != "Publica" && tipo != "Privada") {
+                Toast.makeText(this, "Por favor, seleccione un tipo válido", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            if (equipo != true && equipo != false) {
+                Toast.makeText(this, "Por favor, seleccione un valor válido para equipo", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             val jugadores: List<String> = emptyList()
             val reservasCollection = db.collection("reservas")
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val fechaTimestamp = Timestamp(dateFormat.parse(fecha)!!)
+
             val nuevaReserva = hashMapOf(
                 "encargado" to encargado,
                 "horario" to horarioSeleccionadoID,
-                "fecha" to fecha,
+                "fecha" to fechaTimestamp,
                 "estado" to true,
                 "tipo" to tipo,
                 "equipo" to equipo,
@@ -203,7 +227,7 @@ class CrearReserva : AppCompatActivity() {
                     horarioCollection.document(horarioSeleccionadoID)
                         .update("reservado", true)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Reserva creada con éxito", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Debe cancelar un 25% de la reserva por sinpe", Toast.LENGTH_LONG).show()
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(this, "Error al actualizar el horario", Toast.LENGTH_SHORT).show()
