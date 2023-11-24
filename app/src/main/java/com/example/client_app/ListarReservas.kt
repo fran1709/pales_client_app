@@ -36,6 +36,7 @@ private lateinit var db: FirebaseFirestore
 private lateinit var startForResult: ActivityResultLauncher<Intent>
 private val reservaList = mutableListOf<Reserva>()
 private val jugadorList = mutableListOf<Jugador>()
+private var idUsuarioConectado = ""
 
 class ListarReservas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,9 +91,9 @@ class ListarReservas : AppCompatActivity() {
 
     private fun obtenerBloqueosUsuarioActual(onComplete: (List<String>) -> Unit) {
         val user = FirebaseAuth.getInstance().currentUser
-
         if (user != null) {
             val uidUsuario = user.uid
+            idUsuarioConectado = uidUsuario
 
             db.collection("jugadores")
                 .document(uidUsuario)
@@ -218,6 +219,7 @@ class ListarReservas : AppCompatActivity() {
             itemView?.setOnClickListener {
                 val intent = Intent(context, DetalleReserva::class.java)
                 intent.putExtra("encargado", reserva.encargado)
+                intent.putExtra("idUsuarioConectado", idUsuarioConectado)
                 intent.putExtra("estado", reserva.estado)
                 intent.putExtra("equipo", reserva.equipo)
                 intent.putExtra("horario", reserva.horario)

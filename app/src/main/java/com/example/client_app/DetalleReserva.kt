@@ -3,6 +3,7 @@ package com.example.client_app
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,7 @@ class DetalleReserva : AppCompatActivity() {
         val tipo = intent.getStringExtra("tipo")
         val apodoEncargado = intent.getStringExtra("apodoEncargado")
         val fecha = intent.getStringExtra("fecha")
+        val idUsuarioConectado = intent.getStringExtra("idUsuarioConectado")
         val portero = intent.getBooleanExtra("portero", false)
 
         val retadoresLabel: TextView = findViewById(R.id.retadores)
@@ -85,8 +87,15 @@ class DetalleReserva : AppCompatActivity() {
                         horaFinText.text = ("${horarios[0].horaFin}")
                     }
                     displayRetadores(retadoresList)
+                    if (retadoresList.any { it.uidJugador == idUsuarioConectado }) {
+                        crearReservaButton.visibility = View.GONE
+                    }
                 }
             }
+        }
+
+        if (idUsuarioConectado == encargado) {
+            crearReservaButton.visibility = View.GONE
         }
 
         val backButton: ImageButton = findViewById(R.id.backButton)
@@ -95,12 +104,14 @@ class DetalleReserva : AppCompatActivity() {
             finish()
         }
 
-        crearReservaButton.setOnClickListener {
-            if (documentId != null) {
-                unirseReserva(documentId)
+        if (crearReservaButton.visibility == View.VISIBLE) {
+            crearReservaButton.setOnClickListener {
+                if (documentId != null) {
+                    unirseReserva(documentId)
+                }
+                setResult(RESULT_CANCELED)
+                finish()
             }
-            setResult(RESULT_CANCELED)
-            finish()
         }
     }
 
@@ -108,12 +119,12 @@ class DetalleReserva : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user != null) {
-            val encargado = user.uid
+            val usuarioConectado = user.uid
 
             val reservasCollection = db.collection("reservas")
 
             reservasCollection.document(documentId)
-                .update("retadores", FieldValue.arrayUnion(encargado))
+                .update("retadores", FieldValue.arrayUnion(usuarioConectado))
                 .addOnSuccessListener {
                     Toast.makeText(this, "Te has unido a la reserva con éxito", Toast.LENGTH_SHORT).show()
 
