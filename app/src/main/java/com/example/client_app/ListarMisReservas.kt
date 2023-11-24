@@ -14,6 +14,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -111,7 +112,7 @@ class ListarMisReservas : AppCompatActivity() {
     // Función para convertir un documento de Firebase a un objeto Reserva
     fun mapFirebaseDocumentToReservaMisReservas(document: DocumentSnapshot): Reserva {
         val encargadoUID = document.getString("encargado") ?: ""
-        val estado = false
+        val estado = document.getBoolean("estado") ?: false
         val equipo = document.getBoolean("equipo") ?: false
         val horario = document.getString("horario") ?: ""
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
@@ -157,12 +158,20 @@ class ListarMisReservas : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var itemView = convertView
             if (itemView == null) {
-                itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
+                itemView = LayoutInflater.from(context).inflate(R.layout.item_mireserva, parent, false)
             }
 
             val reserva = reservas[position]
-            itemView?.findViewById<TextView>(android.R.id.text1)?.apply {
-                text = " "
+
+            val textView = itemView?.findViewById<TextView>(R.id.mireservaTextView)
+
+            if (reserva.estado) {
+                textView?.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
+            } else {
+                textView?.setBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
+            }
+            textView?.text = ""
+            textView?.apply {
                 if (reserva.tipo == "Publica") {
                     append("Reto")
                 } else {
