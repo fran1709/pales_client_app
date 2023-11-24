@@ -161,4 +161,8 @@ class menu_principal : AppCompatActivity() {
         val intent = Intent(this, ListarEventos::class.java)
         startActivity(intent)
     }
+    fun call_banear_people(view: View){
+        val intent = Intent(this, BanearPersona::class.java)
+        startActivity(intent)
+    }
 }
