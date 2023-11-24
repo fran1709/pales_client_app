@@ -83,7 +83,7 @@ class BuscarEvento : AppCompatActivity() {
                     val fecha = document.getDate("fecha") ?: Date()
                     val imagenUrl = document.getString("imagen_url") ?: ""
                     val fechaFormateada = dateFormat.format(fecha)
-                    val visto = document.getBoolean("visto") ?: false
+                    val visto = false
 
                     val evento = Evento(
                         id = id,

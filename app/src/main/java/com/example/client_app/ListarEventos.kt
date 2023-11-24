@@ -29,10 +29,6 @@ class ListarEventos : AppCompatActivity() {
         setContentView(R.layout.activity_listar_eventos)
         db = FirebaseFirestore.getInstance()
 
-        // Recuperar el estado de "leído" desde SharedPreferences
-        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val eventosLeidos = sharedPreferences.getStringSet("eventosLeidos", setOf()) ?: setOf()
-
         eventosListData()
 
         val searchEvento: ImageButton = findViewById(R.id.searchEventos)
