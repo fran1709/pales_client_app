@@ -14,6 +14,7 @@
     <color name="black_overlay">#66000000</color>
     <color name="grey">#C7C7C7</color>
     <color name="light_grey">#E0E0E0</color>
+    <color name="light_red">#FFDADA</color>
     <color name="my_light_primary">#FF6200EA</color>
     <color name="my_status_bar_color">#FF512DA8</color>
     <color name="my_navigation_bar_color">#FF512DA8</color>

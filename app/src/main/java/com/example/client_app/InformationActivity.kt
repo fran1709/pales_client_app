@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
 import android.os.Handler
+import android.widget.ImageView
 
 class InformationActivity : AppCompatActivity() {
     private lateinit var tabLayout:TabLayout;
@@ -74,6 +75,19 @@ class InformationActivity : AppCompatActivity() {
             // Establecer la pestaña seleccionada en el TabLayout
             tabLayout.getTabAt(selectedTabPosition)?.select()
         }
+
+        val whatsAppIcon = findViewById<ImageView>(R.id.whatsAppIcon)
+        whatsAppIcon.setOnClickListener {
+            // Número de teléfono al que deseas enviar el mensaje (debe incluir el código de país)
+            val phoneNumber = "+50684092161"
+
+            // Crea un Intent con la acción ACTION_VIEW y el URI del número de teléfono en el formato de WhatsApp
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/$phoneNumber"))
+
+            // Inicia la actividad con el Intent
+            startActivity(intent)
+        }
+
     }
     override fun onDestroy() {
         super.onDestroy()

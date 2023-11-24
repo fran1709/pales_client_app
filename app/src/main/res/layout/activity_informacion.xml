@@ -46,6 +46,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
@@ -67,7 +68,7 @@
             android:shadowDx="10"
             android:shadowDy="10"
             android:shadowRadius="10"
-            android:text="Cancha Pale's"
+            android:text="@string/cancha_pale_s"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="45sp"
@@ -84,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="Horarios"
+            android:text="@string/horarios"
             android:textColor="#172E4B"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -95,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="Lunes a Domingo"
+            android:text="@string/lunes_a_domingo"
             android:textAlignment="center"
             android:textColor="#172E4B"
             android:textSize="18sp" />
@@ -106,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:text="5:00 AM - 10:00 PM"
+            android:text="@string/_5_00_am_10_00_pm"
             android:textColor="#172E4B"
             android:textSize="18sp" />
 
@@ -115,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="Teléfonos"
+            android:text="@string/tel_fonos"
             android:textColor="#172E4B"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -125,28 +126,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Tel: 8409-2161 / 8839-9729"
+            android:layout_marginTop="10dp"
+            android:text="@string/tel_8409_2161_8839_9729"
             android:textColor="#172E4B"
             android:textSize="18sp" />
 
+            <ImageView
+                android:id="@+id/whatsAppIcon"
+                android:layout_width="70dp"
+                android:layout_height="58dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:contentDescription="@string/ubicaci_n"
+                android:paddingBottom="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/whatsapp256px"
+                android:focusable="true"
+                />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/ubicaci_n_en_maps"
+            android:textColor="#172E4B"
+            android:textSize="24sp"
+            android:textStyle="bold" />
         <ImageView
             android:id="@+id/locationIcon"
-            android:layout_width="60dp"
-            android:layout_height="48dp"
+            android:layout_width="70dp"
+            android:layout_height="58dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="10dp"
             android:clickable="true"
-            android:contentDescription="Ubicación"
+            android:contentDescription="@string/ubicaci_n"
+            android:paddingBottom="10dp"
             android:scaleType="fitCenter"
             android:onClick="openGoogleMaps"
             android:src="@drawable/ic_ubicacion"
-            app:tint="@color/red" />
+            app:tint="@color/red"
+            android:focusable="true" />
 
         </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.tabs.TabLayout
+
         android:id="@+id/tabLayout"
         style="@style/CustomTabLayout"
         android:layout_width="match_parent"

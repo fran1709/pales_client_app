@@ -44,17 +44,17 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_below="@id/linearLY"
         android:id="@+id/frameLY"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/linearLY"
         android:layout_gravity="center"
         android:layout_marginTop="10dp">
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="32dp"
@@ -63,7 +63,7 @@
             <TextView
                 android:id="@+id/tvUsers"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="top"
                 android:text="Nombre"
@@ -261,7 +261,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:contentDescription="@string/attributeBackgroundDesc"
-                android:src="@drawable/profile_data_background" />
+                android:src="@drawable/profile_data_background3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -274,7 +274,7 @@
                 <TextView
                     android:id="@+id/posicion"
                     style="@style/profileAttributes"
-                    android:layout_width="wrap_content"
+                    android:layout_width="88dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -282,7 +282,7 @@
 
                 <TextView
                     android:id="@+id/posicionText"
-                    android:layout_width="87dp"
+                    android:layout_width="172dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"

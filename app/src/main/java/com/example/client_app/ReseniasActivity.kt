@@ -375,13 +375,12 @@ class ReseniasActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
         obtenerNombreUsuario(userID) { userNombre ->
-            adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre)
+            adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre, this::showEditDialog)
             recyclerView.adapter = adapter
         }
 
-        adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre)
+        adapter = ReseniasAdapter(reseniasList, commentClickListener, userNombre, this::showEditDialog)
         recyclerView.adapter = adapter
 
         reseniasLiveData.value = reseniasList
