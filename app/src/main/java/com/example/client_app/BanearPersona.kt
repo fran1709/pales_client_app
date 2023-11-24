@@ -84,7 +84,7 @@ class BanearPersona : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbarBAN)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Lista de Jugadores"
+        supportActionBar?.title = "Sección Baneo/Desbaneo"
 
         recyclerView = findViewById(R.id.recyclerViewBanearPersona)
         recyclerView.layoutManager = LinearLayoutManager(this)
