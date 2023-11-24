@@ -223,26 +223,38 @@
                     <CheckBox
                         android:id="@+id/porteroCheck1"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:text="Portero" />
 
                     <CheckBox
                         android:id="@+id/defensaCheck1"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:text="Defensa" />
 
                     <CheckBox
                         android:id="@+id/medioCheck1"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:text="Mediocampista" />
 
                     <CheckBox
                         android:id="@+id/delanteroCheck1"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:text="Delantero" />
+
+                    <CheckBox
+                        android:id="@+id/latIzqCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Lateral Izquierdo" />
+
+                    <CheckBox
+                        android:id="@+id/latDerCheck1"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Lateral Derecho" />
 
                 </LinearLayout>
 

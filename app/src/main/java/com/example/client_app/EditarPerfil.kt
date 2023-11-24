@@ -40,6 +40,9 @@ class EditarPerfil : AppCompatActivity() {
         val defensaCheck1 = findViewById<CheckBox>(R.id.defensaCheck1)
         val medioCheck1 = findViewById<CheckBox>(R.id.medioCheck1)
         val delanteroCheck1 = findViewById<CheckBox>(R.id.delanteroCheck1)
+        val latIzqCheck1 = findViewById<CheckBox>(R.id.latIzqCheck1)
+        val latDerCheck1 = findViewById<CheckBox>(R.id.latDerCheck1)
+
         textViewFechanacimiento = findViewById(R.id.fechaNacimientoEdit)
 
         val saveProfile: ImageButton = findViewById(R.id.saveProfile)
@@ -69,6 +72,8 @@ class EditarPerfil : AppCompatActivity() {
                                 "Defensa" -> defensaCheck1.isChecked = true
                                 "Mediocampista" -> medioCheck1.isChecked = true
                                 "Delantero" -> delanteroCheck1.isChecked = true
+                                "Lateral Izquierdo" -> latIzqCheck1.isChecked = true
+                                "Lateral Derecho" -> latDerCheck1.isChecked = true
                             }
                         }
                     }
@@ -121,6 +126,8 @@ class EditarPerfil : AppCompatActivity() {
             if (defensaCheck1.isChecked) selectedPositions.add("Defensa")
             if (medioCheck1.isChecked) selectedPositions.add("Mediocampista")
             if (delanteroCheck1.isChecked) selectedPositions.add("Delantero")
+            if (latIzqCheck1.isChecked) selectedPositions.add("Lateral Izquierdo")
+            if (latDerCheck1.isChecked) selectedPositions.add("Lateral Derecho")
 
             callActivity1(userName.text.toString(), nickname.text.toString(), selectedPositions.joinToString(", "), fechaCovertida, phone.text.toString())
         }

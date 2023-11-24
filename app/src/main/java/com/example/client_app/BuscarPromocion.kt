@@ -104,9 +104,11 @@ class BuscarPromocion : AppCompatActivity() {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
+                    val id = document.id
                     val nombre = document.getString("nombre") ?: ""
                     val descripcion = document.getString("descripcion") ?: ""
                     val estado = document.getBoolean("estado") ?: false
+                    val visto = false
 
                     if (estado) {
                         val fechaInicioRaw = document.getDate("fecha_inicio")?.time ?: 0
@@ -118,12 +120,14 @@ class BuscarPromocion : AppCompatActivity() {
                         val fechaFinalFormateada = dateFormat.format(Date(fechaFinalRaw))
 
                         val promocion = Promocion(
+                            id = id,
                             descripcion = descripcion,
                             estado = estado,
                             fecha_inicio = fechaInicioFormateada,
                             fecha_final = fechaFinalFormateada,
                             imagen_url = imagenUrl,
-                            nombre = nombre
+                            nombre = nombre,
+                            visto = visto
                         )
                         promocionesList.add(promocion)
                     }
