@@ -204,13 +204,16 @@ class RegisterActivity : AppCompatActivity() {
         if(isGoalKeeper){
             posiciones.add("Portero")
             totalCheck = true
-        } else if (isDefense){
+        }
+        if (isDefense){
             posiciones.add("Defensa")
             totalCheck = true
-        } else if (isMidfielder){
+        }
+        if (isMidfielder){
             posiciones.add("Mediocampista")
             totalCheck = true
-        } else if (isFordward){
+        }
+        if (isFordward){
             posiciones.add("Delantero")
             totalCheck = true
         }
