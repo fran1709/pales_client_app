@@ -191,11 +191,15 @@ class RegisterActivity : AppCompatActivity() {
     fun positionCheck(): Boolean {
         val goalkeeper = findViewById<CheckBox>(R.id.porteroCheck)
         val defense = findViewById<CheckBox>(R.id.defensaCheck)
+        val latDer = findViewById<CheckBox>(R.id.latDerCheck)
+        val latIzq = findViewById<CheckBox>(R.id.latIzqCheck)
         val midfielder = findViewById<CheckBox>(R.id.medioCheck)
         val forward = findViewById<CheckBox>(R.id.delanteroCheck)
 
         val isGoalKeeper = goalkeeper.isChecked
         val isDefense = defense.isChecked
+        val islatDer = latDer.isChecked
+        val islatIzq = latIzq.isChecked
         val isMidfielder = midfielder.isChecked
         val isFordward = forward.isChecked
 
@@ -207,6 +211,14 @@ class RegisterActivity : AppCompatActivity() {
         }
         if (isDefense){
             posiciones.add("Defensa")
+            totalCheck = true
+        }
+        if (islatDer){
+            posiciones.add("Lateral Derecho")
+            totalCheck = true
+        }
+        if (islatIzq){
+            posiciones.add("Lateral Izquierdo")
             totalCheck = true
         }
         if (isMidfielder){

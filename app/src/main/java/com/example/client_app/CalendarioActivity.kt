@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 class CalendarioActivity : AppCompatActivity() {
     lateinit var textViewFecha: TextView
@@ -72,6 +73,7 @@ class CalendarioActivity : AppCompatActivity() {
                         // Aquí puedes hacer algo con el timestamp, por ejemplo, guardarlo en Firebase
                         // o compararlo con otros timestamps
                         println("Timestamp: $timestamp")
+                        Log.d("Mitag", "Timestamp: " + timestamp)
                     } else {
                         println("Error al convertir la fecha a timestamp")
                     }
@@ -79,7 +81,7 @@ class CalendarioActivity : AppCompatActivity() {
                 year, month, day
             )
 
-            datePickerDialog.datePicker.maxDate = calendar.timeInMillis
+            datePickerDialog.datePicker.minDate = calendar.timeInMillis
             datePickerDialog.show()
         }
 
@@ -110,6 +112,7 @@ class CalendarioActivity : AppCompatActivity() {
     }
 
     fun buscarTanda(fechaSelect: String){
+        Log.d("Mitag", "Fecha Seleccionada antes de: " + fechaSelect)
         val formatoFecha = SimpleDateFormat("dd 'de' MMMM 'de' yyyy, 00:00:00 'UTC-6'", Locale.getDefault())
         val fecha = formatoFecha.parse(fechaSelect)?.time
 

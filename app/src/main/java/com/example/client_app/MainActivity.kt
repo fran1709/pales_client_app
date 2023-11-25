@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     }
     fun callRegister(view: View) {
         // Crear un Intent para iniciar la Activity2
-        val intent = Intent(this, CalendarioActivity::class.java)
+        val intent = Intent(this, RegisterActivity::class.java)
 
         // Iniciar la Activity2 utilizando el Intent
         startActivity(intent)
