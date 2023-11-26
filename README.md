@@ -11,7 +11,8 @@ Encuentra jugadores, promociones y eventos de manera eficiente. Filtra los resul
 ## Gestión de Reservas y Eventos 
 Desde la creación de nuevas reservas hasta la exploración de eventos emocionantes, nuestra aplicación facilita la gestión de tus actividades deportivas.
 
-## Perfil Personalizado: Configura y personaliza tu perfil de usuario para reflejar tu estilo y preferencias. Mantén actualizada tu información para una experiencia de usuario única.
+## Perfil Personalizado
+Configura y personaliza tu perfil de usuario para reflejar tu estilo y preferencias. Mantén actualizada tu información para una experiencia de usuario única.
 
 ##Colaboración y Comunicación 
 Interactúa con otros jugadores, organizadores de eventos y participantes a través de funciones de reseñas y comentarios. Fomenta una comunidad deportiva activa y comprometida.
