@@ -1,4 +1,5 @@
 ##Descripción de la Aplicación
+
 #Pale's Client App 
 Una Experiencia Integral para la Gestión Deportiva. Es una aplicación Android diseñada para ofrecer a los usuarios una experiencia completa en la gestión de actividades deportivas. Desarrollado como un proyecto sin fines de lucro para una empresa dedicada al bienestar deportivo y recreativo de las comunidades locales, nuestra aplicación tiene como objetivo fortalecer los lazos deportivos en las zonas aledañas con la empresa, así como su facilididad de comunicación mutua.
 
