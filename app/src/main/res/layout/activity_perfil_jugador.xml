@@ -262,9 +262,28 @@
                     android:textAppearance="@style/profileAttributesText" />
 
             </LinearLayout>
-
         </FrameLayout>
+        <Button
+            android:id="@+id/BloquearButton"
+            android:layout_width="350dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="?attr/colorError"
+            android:text="Bloquear"
+            android:textColor="#FFFFFF"
+            android:textColorLink="?attr/colorError" />
 
+        <Button
+            android:id="@+id/DesloquearButton"
+            android:layout_width="350dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="?attr/colorError"
+            android:text="Desloquear"
+            android:textColor="#FFFFFF"
+            android:textColorLink="?attr/colorError" />
 
     </LinearLayout>
 

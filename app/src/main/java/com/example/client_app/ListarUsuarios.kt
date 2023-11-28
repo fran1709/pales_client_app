@@ -126,6 +126,7 @@ class ListarUsuarios : AppCompatActivity() {
                     .addOnSuccessListener { documentSnapshot ->
                         for (document in documentSnapshot) {0
                             // Retrieve data from the document
+                            val playerUID = document.getString("UID")
                             val playerName = document.getString("nombre")
                             val playerNickname = document.getString("apodo")
                             val playerPositions = document.get("posiciones") as List<String>?
@@ -135,6 +136,7 @@ class ListarUsuarios : AppCompatActivity() {
 
                             // Cuando se hace clic en un elemento, abrir la actividad PerfilJugador
                             val intent = Intent(context, PerfilJugador::class.java)
+                            intent.putExtra("UID", playerUID)
                             intent.putExtra("nombre", playerName)
                             intent.putExtra("apodo", playerNickname)
                             intent.putStringArrayListExtra("posiciones", ArrayList(jugador.posiciones))
