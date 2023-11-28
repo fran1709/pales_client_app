@@ -4,6 +4,7 @@ package com.example.client_app
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
+import java.util.Date
+import java.util.Locale
 
 private lateinit var startForResult: ActivityResultLauncher<Intent>
 
@@ -190,6 +193,8 @@ class MiPerfil : AppCompatActivity() {
         val phone: TextView = findViewById(R.id.telefonoText)
 
         val backProfile: ImageButton = findViewById(R.id.backButton)
+        val formatoDeseado = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
 
         db.collection("jugadores")
             .whereEqualTo("UID", id)
@@ -204,11 +209,29 @@ class MiPerfil : AppCompatActivity() {
                     val playerPhone = document.getString("telefono")
                     val playerCorreo = document.getString("correo")
 
+                    val fechaFormateada = try {
+                        val playerBirthdayMillis = playerBirthday?.toLongOrNull()
+                        if (playerBirthdayMillis != null) {
+                            // Crea un objeto Date utilizando milisegundos
+                            val fechaNacimiento = Date(playerBirthdayMillis)
+
+                            // Formatea la fecha en el nuevo formato
+                            formatoDeseado.format(fechaNacimiento)
+                        } else {
+                            // Imprime un mensaje si la conversión de cadena a Long falla
+                            Log.e("MiPerfilActivity", "No se pudo convertir la fecha a milisegundos")
+                            null
+                        }
+                    } catch (e: Exception) {
+                        // Maneja cualquier otro error al convertir o formatear la fecha
+                        Log.e("MiPerfilActivity", "Error al convertir o formatear la fecha", e)
+                        null
+                    }
                     // Update the TextViews with the retrieved data
                     userName.text = "$playerName"
                     nickname.text = "$playerNickname"
                     position.text = "${playerPositions?.joinToString(", ")}"
-                    age.text = "$playerBirthday"
+                    age.text = fechaFormateada ?: "Fecha no disponible"
                     phone.text = "$playerPhone"
                     correoText.text = "$playerCorreo"
                 }

@@ -1,27 +1,36 @@
 package com.example.client_app
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    private var verificado: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+
+        // Inicializar Firebase
+        db = FirebaseFirestore.getInstance()
 
         // Recordar al usuario
         loadPreferences()
@@ -37,18 +46,30 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
+                        if (user != null) {
+                            verification(user.uid)
+                            if(verificado){
+                                Toast.makeText(
+                                    baseContext,
+                                    "Bienvenido",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                                call_activity_menu_principal();
+                            } else {
+                                Toast.makeText(
+                                    baseContext,
+                                    "La verificación de usuario esta pendiente",
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                                auth.signOut()
+                            }
+                        }
                         rememberUser(email.text.toString(), password.text.toString())
-                        Toast.makeText(
-                            baseContext,
-                            "Persona logueada",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        call_activity_menu_principal();
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(
                             baseContext,
-                            "Authentication failed.",
+                            "No se pudo iniciar sesión.",
                             Toast.LENGTH_SHORT,
                         ).show()
                     }
@@ -67,6 +88,23 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
+    }
+
+    // Verificacion para ver si el usuario esta validado
+    fun verification(userID : String) {
+        db.collection("jugadores")
+            .whereEqualTo("UID", userID)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                for (document in documentSnapshot) {
+                    Log.d("MiTag", "Estado" + document.getBoolean("estado") + "User id: " + document.getString("UID") )
+                    verificado = document.getBoolean("estado") == true
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle failures
+            }
+        Log.d("MiTag", "Verificacion: " + verificado )
     }
 
     // Función para recuperar contraseña

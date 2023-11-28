@@ -2,9 +2,11 @@ package com.example.client_app
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
@@ -13,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import java.util.Date
+import java.util.Locale
 
 class EditarPerfil : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
@@ -48,6 +52,7 @@ class EditarPerfil : AppCompatActivity() {
         val saveProfile: ImageButton = findViewById(R.id.saveProfile)
         val backProfile: ImageButton = findViewById(R.id.backProfile)
 
+        val formatoDeseado = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         db.collection("jugadores")
             .whereEqualTo("UID", id)
@@ -58,10 +63,21 @@ class EditarPerfil : AppCompatActivity() {
                     val playerName = document.getString("nombre")
                     val playerNickname = document.getString("apodo")
                     val playerBirthday = document.getString("fecha_nacimiento")
-                    if (!playerBirthday.isNullOrBlank()) {
-                        textViewFechanacimiento.text = playerBirthday
-                        fechaCovertida = playerBirthday // Asegúrate de que fechaCovertida sea del mismo tipo que necesitas
+                    val fechaFormateada = try {
+                        val playerBirthdayMillis = playerBirthday?.toLongOrNull()
+                        if (playerBirthdayMillis != null) {
+                            val fechaNacimiento = Date(playerBirthdayMillis)
+
+                            formatoDeseado.format(fechaNacimiento)
+                        } else {
+                            "Fecha no disponible"
+                        }
+                    } catch (e: Exception) {
+                        "Fecha no disponible"
                     }
+                    textViewFechanacimiento.text = fechaFormateada
+                    fechaCovertida = playerBirthday ?: ""
+
                     val playerPhone = document.getString("telefono")
                     val playerPositions = document.get("posiciones") as List<String>?
                     playerPositions?.let {

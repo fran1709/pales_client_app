@@ -72,13 +72,14 @@ class ListarUsuarios : AppCompatActivity() {
     }
     private fun usersListData(id1 : String?) {
         val jugadoresCollection = db.collection("jugadores")
-
+        
         jugadoresCollection.get()
             .addOnSuccessListener { querySnapshot ->
                 val jugadoresList = mutableListOf<Jugador>()
 
                 for (document in querySnapshot) {
                     val id = document.getString("UID")
+
                     if(id != id1){
                         val nombre = document.getString("nombre") ?: ""
                         val posiciones = document.get("posiciones") as? List<String> ?: emptyList()
@@ -130,9 +131,6 @@ class ListarUsuarios : AppCompatActivity() {
                             val playerName = document.getString("nombre")
                             val playerNickname = document.getString("apodo")
                             val playerPositions = document.get("posiciones") as List<String>?
-                            val playerBirthday = document.getString("fecha_nacimiento")
-                            val playerPhone = document.getString("telefono")
-                            val playerClasificacion = document.getString("clasificacion")
 
                             // Cuando se hace clic en un elemento, abrir la actividad PerfilJugador
                             val intent = Intent(context, PerfilJugador::class.java)
@@ -140,9 +138,6 @@ class ListarUsuarios : AppCompatActivity() {
                             intent.putExtra("nombre", playerName)
                             intent.putExtra("apodo", playerNickname)
                             intent.putStringArrayListExtra("posiciones", ArrayList(jugador.posiciones))
-                            intent.putExtra("fecha_nacimiento", playerBirthday)
-                            intent.putExtra("telefono", playerPhone)
-                            intent.putExtra("clasificacion", playerClasificacion)
                             context.startActivity(intent)
                         }
                     }
@@ -259,48 +254,3 @@ class ListarUsuarios : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-
-
-/*class JugadorAdapter(context: Context, private val jugadores: List<Jugador>) : ArrayAdapter<Jugador>(context, 0, jugadores) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var itemView = convertView
-        if (itemView == null) {
-            itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
-        }
-
-        val jugador = jugadores[position]
-        itemView?.findViewById<TextView>(android.R.id.text1)?.text = "Nombre: ${jugador.nombre}  Posición: ${jugador.posiciones.joinToString(", ")}"
-
-        itemView?.setOnClickListener {
-            db.collection("jugadores")
-                .whereEqualTo("nombre", jugador.nombre) //VERIFICAR POR ID NO POR NOMBRE
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    for (document in documentSnapshot) {0
-                        // Retrieve data from the document
-                        val playerName = document.getString("nombre")
-                        val playerNickname = document.getString("apodo")
-                        val playerPositions = document.get("posiciones") as List<String>?
-                        val playerBirthday = document.getString("fecha_nacimiento")
-                        val playerPhone = document.getString("telefono")
-                        val playerClasificacion = document.getString("clasificacion")
-
-                        // Cuando se hace clic en un elemento, abrir la actividad PerfilJugador
-                        val intent = Intent(context, PerfilJugador::class.java)
-                        intent.putExtra("nombre", playerName)
-                        intent.putExtra("apodo", playerNickname)
-                        intent.putStringArrayListExtra("posiciones", ArrayList(jugador.posiciones))
-                        intent.putExtra("fecha_nacimiento", playerBirthday)
-                        intent.putExtra("telefono", playerPhone)
-                        intent.putExtra("clasificacion", playerClasificacion)
-                        context.startActivity(intent)
-                    }
-                }
-
-        }
-
-        return itemView!!
-    }
-}*/
