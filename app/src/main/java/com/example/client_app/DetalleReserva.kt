@@ -34,7 +34,6 @@ private val retadoresList = mutableListOf<JugadorReserva>()
 
 class DetalleReserva : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
-    private lateinit var horarios: List<Horario>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle_reserva)
@@ -69,8 +68,6 @@ class DetalleReserva : AppCompatActivity() {
         val titulo: TextView = findViewById(R.id.tituloReserva)
         val fechaText: TextView = findViewById(R.id.fecha)
         val privacidadText: TextView = findViewById(R.id.privacidad)
-        val horaInicioText: TextView = findViewById(R.id.horaInicio)
-        val horaFinText: TextView = findViewById(R.id.horaFin)
         titulo.text = if (tipo == "Privada") {
             "Reserva de $apodoEncargado"
         } else {
@@ -82,10 +79,6 @@ class DetalleReserva : AppCompatActivity() {
         jugadoresListData(retadores) {
             if (horario != null) {
                 horarioListData(horario) {
-                    if (horarios.isNotEmpty()) {
-                        horaInicioText.text = ("${horarios[0].horaInicio}")
-                        horaFinText.text = ("${horarios[0].horaFin}")
-                    }
                     displayRetadores(retadoresList)
                     if (retadoresList.any { it.uidJugador == idUsuarioConectado }) {
                         crearReservaButton.visibility = View.GONE
@@ -182,36 +175,35 @@ class DetalleReserva : AppCompatActivity() {
     private fun horarioListData(horarioID: String, onComplete: () -> Unit) {
         val horarioCollection = db.collection("horario")
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formatoHoraMinutos = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-        horarioCollection.whereEqualTo("id", horarioID)
+        horarioCollection.document(horarioID)
             .get()
-            .addOnSuccessListener { querySnapshot ->
-                val horariosList = mutableListOf<Horario>()
-                val fechaActual = Date()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    var fecha = documentSnapshot.getDate("fecha") ?: Date()
+                    val id = documentSnapshot.getString("id") ?: ""
+                    val reservado = documentSnapshot.getBoolean("reservado") ?: false
+                    val tanda = documentSnapshot.get("tanda") as? ArrayList<Timestamp>
+                    val fechaFormateada = dateFormat.format(fecha)
+                    var horaInicio = ""
+                    var horaFin = ""
+                    if (tanda != null && tanda.size == 2) {
+                        val horaInicioGet = tanda[0].toDate()
+                        val horaFinGet = tanda[1].toDate()
+                        val horaInicioFormateada = formatoHoraMinutos.format(horaInicioGet)
+                        val horaFinFormateada = formatoHoraMinutos.format(horaFinGet)
+                        horaInicio = horaInicioFormateada
+                        horaFin = horaFinFormateada
+                        val horaInicioText: TextView = findViewById(R.id.horaInicio)
+                        val horaFinText: TextView = findViewById(R.id.horaFin)
+                        horaInicioText.text = ("${horaInicio}")
+                        horaFinText.text = ("${horaFin}")
 
-                for (document in querySnapshot) {
-                    var fecha = document.getDate("fecha") ?: Date()
-
-                    // Verificar si la fecha es después de la fecha actual
-                    if (fecha.after(fechaActual)) {
-                        val id = document.getString("id") ?: ""
-                        val reservado = document.getBoolean("reservado") ?: false
-                        val tanda = document.get("tanda") as? ArrayList<Timestamp>
-                        val formatoHoraMinutos = SimpleDateFormat("HH:mm", Locale.getDefault())
-                        val fechaFormateada = dateFormat.format(fecha)
-                        var horaInicioFormateada = "00:00"
-                        var horaFinFormateada = "00:00"
-                        if (tanda != null && tanda.size >= 2) {
-                            val horaInicio = tanda[0].toDate()
-                            val horaFin = tanda[1].toDate()
-                            horaInicioFormateada = formatoHoraMinutos.format(horaInicio)
-                            horaFinFormateada = formatoHoraMinutos.format(horaFin)
-                        }
-                        val horario = Horario(id, fechaFormateada, horaInicioFormateada , horaFinFormateada, reservado)
-                        horariosList.add(horario)
+                        val horario = Horario(id, fechaFormateada, horaInicio, horaFin, reservado)
+                        Log.d("TagDeRegistro", "Horario: $horario")
                     }
                 }
-                horarios = horariosList
                 onComplete()
             }
             .addOnFailureListener { exception -> }
