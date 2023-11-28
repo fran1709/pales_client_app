@@ -47,21 +47,8 @@ class MainActivity : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
                         if (user != null) {
-                            verification(user.uid)
-                            if(verificado){
-                                Toast.makeText(
-                                    baseContext,
-                                    "Bienvenido",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                                call_activity_menu_principal();
-                            } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    "La verificación de usuario esta pendiente",
-                                    Toast.LENGTH_LONG,
-                                ).show()
-                                auth.signOut()
+                            verification(user.uid) { isVerified ->
+                                handleVerificationResult(isVerified)
                             }
                         }
                         rememberUser(email.text.toString(), password.text.toString())
@@ -89,22 +76,36 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-    // Verificacion para ver si el usuario esta validado
-    fun verification(userID : String) {
+    private fun handleVerificationResult(isVerified: Boolean) {
+        if (isVerified) {
+            Toast.makeText(
+                baseContext,
+                "Bienvenido",
+                Toast.LENGTH_SHORT,
+            ).show()
+            call_activity_menu_principal()
+        } else {
+            Toast.makeText(
+                baseContext,
+                "La verificación de usuario está pendiente",
+                Toast.LENGTH_LONG,
+            ).show()
+            auth.signOut()
+        }
+    }
+    fun verification(userID: String, callback: (Boolean) -> Unit) {
         db.collection("jugadores")
             .whereEqualTo("UID", userID)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                for (document in documentSnapshot) {
-                    Log.d("MiTag", "Estado" + document.getBoolean("estado") + "User id: " + document.getString("UID") )
-                    verificado = document.getBoolean("estado") == true
-                }
+                val document = documentSnapshot.documents[0]
+                val isVerified = document.getBoolean("estado") == true
+                callback(isVerified)
             }
             .addOnFailureListener { exception ->
                 // Handle failures
+                callback(false)
             }
-        Log.d("MiTag", "Verificacion: " + verificado )
     }
 
     // Función para recuperar contraseña
