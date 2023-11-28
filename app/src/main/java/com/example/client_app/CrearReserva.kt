@@ -211,7 +211,7 @@ class CrearReserva : AppCompatActivity() {
                 "encargado" to encargado,
                 "horario" to horarioSeleccionadoID,
                 "fecha" to fechaTimestamp,
-                "estado" to true,
+                "estado" to false,
                 "tipo" to tipo,
                 "equipo" to equipo,
                 "clasificacion" to dificultadSeleccionada,
@@ -225,7 +225,7 @@ class CrearReserva : AppCompatActivity() {
                 .addOnSuccessListener { documentReference ->
                     val horarioCollection = db.collection("horario")
                     horarioCollection.document(horarioSeleccionadoID)
-                        .update("reservado", false)
+                        .update("reservado", true)
                         .addOnSuccessListener {
                             Toast.makeText(this, "Debe cancelar un 25% de la reserva por sinpe", Toast.LENGTH_LONG).show()
                         }
