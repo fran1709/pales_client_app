@@ -96,11 +96,17 @@ class ListarReservas : AppCompatActivity() {
             idUsuarioConectado = uidUsuario
 
             db.collection("jugadores")
-                .document(uidUsuario)
+                .whereEqualTo("UID", uidUsuario)
                 .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val bloqueos = documentSnapshot.get("bloqueos") as? List<String> ?: emptyList()
-                    onComplete(bloqueos)
+                .addOnSuccessListener { querySnapshot ->
+                    val bloqueosList = mutableListOf<String>()
+
+                    for (document in querySnapshot) {
+                        val bloqueos = document.get("bloqueos") as? List<String> ?: emptyList()
+                        bloqueosList.addAll(bloqueos)
+                    }
+
+                    onComplete(bloqueosList)
                 }
                 .addOnFailureListener { exception ->
                     onComplete(emptyList())
@@ -120,8 +126,9 @@ class ListarReservas : AppCompatActivity() {
 
                     for (document in querySnapshot) {
                         val reserva = mapFirebaseDocumentToReserva(document)
-                        if (reserva.tipo != "privada" && !reserva.retadores.any { it in bloqueosUsuarioActual }
-                            && reserva.encargado !in bloqueosUsuarioActual) {
+                        if (reserva.tipo != "privada" &&
+                            !reserva.retadores.any { it in bloqueosUsuarioActual } &&
+                            reserva.encargado !in bloqueosUsuarioActual) {
                             reserva.documentId = document.id
                             reservaList.add(reserva)
                         }
