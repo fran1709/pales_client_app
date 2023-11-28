@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -21,7 +22,6 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private var verificado: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val password: EditText = findViewById(R.id.editTextPassword)
 
         if (email.text.isNotEmpty() && password.text.isNotEmpty()){
+            showProgressBar()
             auth.signInWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -76,8 +77,20 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    private fun showProgressBar() {
+        // Muestra el ProgressBar
+        val progressBar = findViewById<ProgressBar>(R.id.loginProgressBar)
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        // Oculta el ProgressBar
+        val progressBar = findViewById<ProgressBar>(R.id.loginProgressBar)
+        progressBar.visibility = View.INVISIBLE
+    }
     private fun handleVerificationResult(isVerified: Boolean) {
         if (isVerified) {
+            hideProgressBar()
             Toast.makeText(
                 baseContext,
                 "Bienvenido",
