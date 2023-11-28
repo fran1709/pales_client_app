@@ -16,12 +16,6 @@
             android:name=".CalendarioActivity"
             android:exported="false" />
         <activity
-            android:name=".BanearPersona"
-            android:exported="false" />
-        <activity
-            android:name=".AprobarResenia"
-            android:exported="false" />
-        <activity
             android:name=".InformationActivity"
             android:exported="false" />
         <activity
