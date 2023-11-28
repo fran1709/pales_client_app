@@ -90,93 +90,7 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:contentDescription="@string/attributeBackgroundDesc"
-                android:src="@drawable/profile_data_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp">
-
-                <TextView
-                    android:id="@+id/telefono"
-                    style="@style/profileAttributes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="Teléfono: " />
-
-                <TextView
-                    android:id="@+id/telefonoText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="phoneText"
-                    android:textAppearance="@style/profileAttributesText" />
-
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:contentDescription="@string/attributeBackgroundDesc"
-                android:src="@drawable/profile_data_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp">
-
-                <TextView
-                    android:id="@+id/edad"
-                    style="@style/profileAttributes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="Fecha de Nacimiento: " />
-
-                <TextView
-                    android:id="@+id/edadText"
-                    android:layout_width="87dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="ageText"
-                    android:textAppearance="@style/profileAttributesText" />
-
-
-            </LinearLayout>
-
-        </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -217,49 +131,6 @@
                     android:text="posicionText"
                     android:textAppearance="@style/profileAttributesText" />
 
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:contentDescription="@string/attributeBackgroundDesc"
-                android:src="@drawable/profile_data_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp">
-
-                <TextView
-                    android:id="@+id/clasificacion"
-                    style="@style/profileAttributes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="Clasificación: " />
-
-                <TextView
-                    android:id="@+id/clasificacionText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="classificationText"
-                    android:textAppearance="@style/profileAttributesText" />
 
             </LinearLayout>
 
