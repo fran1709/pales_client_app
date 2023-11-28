@@ -19,23 +19,14 @@ class PerfilJugador : AppCompatActivity() {
         val nombre = intent.getStringExtra("nombre")
         val apodo = intent.getStringExtra("apodo")
         val posiciones = intent.getStringArrayListExtra("posiciones")
-        val fechaNacimiento = intent.getStringExtra("fecha_nacimiento")
-        val telefono = intent.getStringExtra("telefono")
-        val clasificaciontext = intent.getStringExtra("clasificacion")
 
         val userName: TextView = findViewById(R.id.tvUsers)
         val nickname: TextView = findViewById(R.id.nicknameText)
         val position: TextView = findViewById(R.id.posicionText)
-        val age: TextView = findViewById(R.id.edadText)
-        val phone: TextView = findViewById(R.id.telefonoText)
-        val clasificacion: TextView = findViewById(R.id.clasificacionText)
 
         userName.text = "$nombre"
         nickname.text = "$apodo"
         position.text = "${posiciones?.joinToString(", ")}"
-        age.text = "$fechaNacimiento"
-        phone.text = "$telefono"
-        clasificacion.text = "$clasificaciontext"
 
 
         backButton.setOnClickListener {
