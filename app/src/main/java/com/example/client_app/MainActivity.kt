@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                         rememberUser(email.text.toString(), password.text.toString())
                     } else {
                         // If sign in fails, display a message to the user.
+                        hideProgressBar()
                         Toast.makeText(
                             baseContext,
                             "No se pudo iniciar sesión.",
@@ -63,12 +64,14 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         } else if (email.text.isEmpty()){
+            hideProgressBar()
             Toast.makeText(
                 baseContext,
                 "Por favor ingrese un correo",
                 Toast.LENGTH_SHORT,
             ).show()
         } else if (password.text.isEmpty()){
+            hideProgressBar()
             Toast.makeText(
                 baseContext,
                 "Por favor ingrese una contraseña",
@@ -89,8 +92,8 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
     }
     private fun handleVerificationResult(isVerified: Boolean) {
+        hideProgressBar()
         if (isVerified) {
-            hideProgressBar()
             Toast.makeText(
                 baseContext,
                 "Bienvenido",
