@@ -34,7 +34,11 @@ class DetallePromocion : AppCompatActivity() {
         val fechaInicioText: TextView = findViewById(R.id.fecha_inicioText)
         val fechaFinalText: TextView = findViewById(R.id.fecha_finalText)
         val imageView: ImageView = findViewById(R.id.imagenView)
-        Picasso.get().load(imagenUrl).placeholder(R.drawable.cancha1).into(imageView)
+        if (imagenUrl != null && imagenUrl.isNotEmpty()) {
+            Picasso.get().load(imagenUrl).placeholder(R.drawable.cancha1).into(imageView)
+        } else {
+            imageView.setImageResource(R.drawable.cancha1)
+        }
         val tvPromotionName: TextView = findViewById(R.id.tvPromotionName)
 
         // Establecer los valores en los TextViews
